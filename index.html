@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Datavis course project - A look a healthcare in the U.S.</title>
+    <link rel="stylesheet" type="text/css" href="css/map.css">
+    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+</head>
+<body>
+	<!--<svg id="scatterplot"></svg>
+	<label>Scatterplot X axis:</label>
+	<label>Scatterplot Y axis:</label>-->
+  <svg id="map" width="960" height="600">
+    <g class="counties"></g>
+    <path class="states"></path>
+  </svg>
+  <br>
+	<label>Map colors:</label>
+  <select id="map-data-section"></select>
+  <select id="map-data-column"></select>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
