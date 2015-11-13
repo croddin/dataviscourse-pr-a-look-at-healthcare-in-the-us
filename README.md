@@ -1,8 +1,5 @@
-# dataviscourse-pr-a-look-at-healthcare-in-the-us
+Data stored in /data diretory
 
-### To get started
-* Serve this directory. You can use:
+Javascript in /js directory
 
-    python -m SimpleHTTPServer 8080
-
-* Visit http://localhost:8080/ to look at the data
+HTML in main directory
