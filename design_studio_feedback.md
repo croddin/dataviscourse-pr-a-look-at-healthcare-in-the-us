@@ -13,3 +13,5 @@ It was decided that our primary encodings are: geospatial, position, color. Thes
 
 Some feedback that we got for interaction was that we should animate transitions on the scatterplot. When the user hovers over dots, more information should appear.
 Also when the user selects states in the map, highlight in the scatterplot. We plan to implement these features.
+
+We think that this feedback was fair and that it will be useful in our further work on the project.
