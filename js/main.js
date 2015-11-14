@@ -58,12 +58,12 @@ function updateScatterplot(fileName, yParameter) {
 
     var xyData = [];
 
-    for (var i = 0; i < xVarById.values().length; i++) {
-        xyData.push({
-            xValue: xVarById.values()[i],
-            yValue: yVarById.values()[i]
-        });
-    }
+    xVarById.keys().forEach((i)=>{
+      xyData.push({
+          xValue: xVarById.get(i),
+          yValue: yVarById.get(i)
+      });
+    })
 
     var svgBounds = document.getElementById("scatterplot").getBoundingClientRect(),
         xAxisSize = 50,
