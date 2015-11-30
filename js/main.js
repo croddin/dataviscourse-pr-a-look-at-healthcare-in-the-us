@@ -41,8 +41,35 @@ function getFipsCodeFromRow(d){
 }
 
 function getVarFromRow(d, colName){
-  var col = +d[colName]
-  return col > 0 ? col : 0;
+    var col = +d[colName];
+    return col > 0 ? col : 0;
+}
+
+function getCountyStateNames (d, colName) {
+    return d[colName];
+}
+
+function setHover(d) {
+    var div = d3.select("#tooltip");
+
+    if (d != null) {
+        div.transition()
+            .duration(200)
+            .style("opacity", .9);
+
+        div.html(d.countyStateName)
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 30) + "px");
+    }
+    else {
+        div.transition()
+            .duration(500)
+            .style("opacity", 0);
+    }
+}
+
+function clearHover() {
+    setHover(null);
 }
 
 function updateScatterplot(fileName, yParameter) {
@@ -56,12 +83,21 @@ function updateScatterplot(fileName, yParameter) {
     yVarById = d3.map();
     yData.forEach(d=>yVarById.set(getFipsCodeFromRow(d), getVarFromRow(d,yParameter)));
 
+    //County names
+    countyNames = d3.map();
+    xData.forEach(d=>countyNames.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name")));
+
+    //State abbreviations
+    stateAbbr = d3.map();
+    xData.forEach(d=>stateAbbr.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_State_Abbr")));
+
     var xyData = [];
 
     xVarById.keys().forEach((i)=>{
       xyData.push({
           xValue: xVarById.get(i),
-          yValue: yVarById.get(i)
+          yValue: yVarById.get(i),
+          countyStateName: countyNames.get(i) + ", " + stateAbbr.get(i)
       });
     })
 
@@ -104,8 +140,8 @@ function updateScatterplot(fileName, yParameter) {
     circles.enter()
         .append("circle");
 
-    //circles.on("mouseover", function (d) {setHover(d)})
-    //    .on("mouseout", function (d) {clearHover()})
+    circles.on("mouseover", function (d) {setHover(d)})
+        .on("mouseout", function (d) {clearHover()});
     //    .on("click", function (d) {changeSelection(d)});
 
     circles.attr("cy", function(d) {return yScale(d.yValue)})

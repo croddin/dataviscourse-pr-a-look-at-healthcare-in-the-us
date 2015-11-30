@@ -9,11 +9,19 @@
     <script src="http://d3js.org/queue.v1.min.js"></script>
 </head>
 <body>
+    <label>Select parameter to update scatter plot and map:</label>
+    <select id="map-data-section"></select>
+    <select id="map-data-column"></select>
+
+    <br /><br />
+
     <svg id="scatterplot" width="960" height="600">
         <g id="xAxis"></g>
         <g id="yAxis"></g>
         <g id="circles"></g>
     </svg>
+    <div id="tooltip"></div>
+
     <br />
 	<!--<svg id="scatterplot"></svg>
 	<label>Scatterplot X axis:</label>
@@ -22,12 +30,6 @@
     <g class="counties"></g>
     <path class="states"></path>
     </svg>
-
-    <br />
-
-    <label>Select parameters:</label>
-    <select id="map-data-section"></select>
-    <select id="map-data-column"></select>
 
   <script src="js/main.js"></script>
 </body>

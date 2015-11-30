@@ -8,3 +8,17 @@
   stroke: #000;
   stroke-linejoin: round;
 }
+
+div#tooltip {
+  position: absolute;
+  text-align: center;
+  width: 100px;
+  height: 30px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  opacity: 0;
+}
