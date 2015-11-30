@@ -57,7 +57,7 @@ function setHover(d) {
             .duration(200)
             .style("opacity", .9);
 
-        div.html(d.countyStateName)
+        div.html(d.countyStateName + "<br />" + "Health status:" + d.xValue + "%")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 30) + "px");
     }
@@ -83,13 +83,10 @@ function updateScatterplot(fileName, yParameter) {
     yVarById = d3.map();
     yData.forEach(d=>yVarById.set(getFipsCodeFromRow(d), getVarFromRow(d,yParameter)));
 
-    //County names
-    countyNames = d3.map();
-    xData.forEach(d=>countyNames.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name")));
+    //County and state names
+    countyStateNames = d3.map();
+    xData.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name") + ", " + getCountyStateNames(d, "CHSI_State_Abbr")));
 
-    //State abbreviations
-    stateAbbr = d3.map();
-    xData.forEach(d=>stateAbbr.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_State_Abbr")));
 
     var xyData = [];
 
@@ -97,7 +94,7 @@ function updateScatterplot(fileName, yParameter) {
       xyData.push({
           xValue: xVarById.get(i),
           yValue: yVarById.get(i),
-          countyStateName: countyNames.get(i) + ", " + stateAbbr.get(i)
+          countyStateName: countyStateNames.get(i)
       });
     })
 
@@ -142,7 +139,6 @@ function updateScatterplot(fileName, yParameter) {
 
     circles.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
-    //    .on("click", function (d) {changeSelection(d)});
 
     circles.attr("cy", function(d) {return yScale(d.yValue)})
         //.attr("transform", function (d) {return "translate(" + xScale(d.Date) + ",0)";})
@@ -160,6 +156,10 @@ function updateMap(fileName, colName){
     varById = d3.map();
     data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,colName)));
 
+    //County names
+    countyStateNames = d3.map();
+    data.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name") + ", " + getCountyStateNames(d, "CHSI_State_Abbr")));
+
     var dScale = d3.scale.linear() //lin or log
         .domain(d3.extent(varById.values()))
         .range([0,1]);
@@ -175,6 +175,9 @@ function updateMap(fileName, colName){
         .data(topojson.feature(us, us.objects.counties).features)
     counties.enter().append("path").attr("d", path)
     counties.style("fill", (d)=>cInterp(dScale(varById.get(d.id))));
+
+    counties.on("mouseover", function (d) {setHover(countyStateNames.get(d.id))})
+        .on("mouseout", function (d) {clearHover()});
 
     map.select(".states")
         .datum(topojson.mesh(us, us.objects.states,(a, b)=> a !== b))
