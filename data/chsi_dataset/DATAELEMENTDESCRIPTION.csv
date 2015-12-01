@@ -1,51 +1,48 @@
 PAGE_NAME,COLUMN_NAME,DATA_TYPE,IS_PERCENT_DATA,DESCRIPTION,REFERENCE,LONG_DESCRIPTION
-Demographics,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,CHSI_County_Name,Text,N,Name of county,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,CHSI_State_Name,Text,N,Name of State or District of Columbia,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Population_Size,Integer,N,"County data, population size","Data Sources, Definitions, and Notes, Page 4",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Population_Density,Integer,N,"County data, population density (people per square mile)","Data Sources, Definitions, and Notes, Page 4",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Poverty,Decimal,Y,"County data, individuals living below poverty level","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Age_19_Under,Decimal,Y,"County data, population under age 19","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Age_19_64,Decimal,Y,"County data, population age 19-64","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Age_65_84,Decimal,Y,"County data, population age 65-84","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Age_85_and_Over,Decimal,Y,"County data, population age 85+","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,White,Decimal,Y,"County data, White","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Black,Decimal,Y,"County data, Black","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Native_American,Decimal,Y,"County data, American Indian","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Asian,Decimal,Y,"County data, Asian/Pacific Islander","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-Demographics,Hispanic,Decimal,Y,"County data, Hispanic origin","Data Sources, Definitions, and Notes, Page 5",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-SummaryMeasuresOfHealth,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-SummaryMeasuresOfHealth,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-SummaryMeasuresOfHealth,CHSI_County_Name,Text,N,Name of county,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-SummaryMeasuresOfHealth,CHSI_State_Name,Text,N,Name of State or District of Columbia,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-SummaryMeasuresOfHealth,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-SummaryMeasuresOfHealth,ALE,Decimal,N,"County data, average life expectancy","Data Sources, Definitions, and Notes, Page 9",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
+Demographics,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
+Demographics,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
+Demographics,CHSI_County_Name,Text,N,Name of county,,""""""
+Demographics,CHSI_State_Name,Text,N,Name of State or District of Columbia,,""""""
+Demographics,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,""""""
+Demographics,Population_Size,Integer,N,"County data, population size","Data Sources, Definitions, and Notes, Page 4",Total population size
+Demographics,Population_Density,Integer,N,"County data, population density (people per square mile)","Data Sources, Definitions, and Notes, Page 4",Population density
+Demographics,Poverty,Decimal,Y,"County data, individuals living below poverty level","Data Sources, Definitions, and Notes, Page 5",Poverty level as a percentage
+Demographics,Age_19_Under,Decimal,Y,"County data, population under age 19","Data Sources, Definitions, and Notes, Page 5",Percentage of the population under the age of 19
+Demographics,Age_19_64,Decimal,Y,"County data, population age 19-64","Data Sources, Definitions, and Notes, Page 5",Percentage of the population between the ages of 19 and 64
+Demographics,Age_65_84,Decimal,Y,"County data, population age 65-84","Data Sources, Definitions, and Notes, Page 5",Percentage of the population between the ages of 65 and 84
+Demographics,Age_85_and_Over,Decimal,Y,"County data, population age 85+","Data Sources, Definitions, and Notes, Page 5",Percentage of the population over the age of 85
+Demographics,White,Decimal,Y,"County data, White","Data Sources, Definitions, and Notes, Page 5",Percentage of non-Hispanic white people
+Demographics,Black,Decimal,Y,"County data, Black","Data Sources, Definitions, and Notes, Page 5",Percentage of African-American people
+Demographics,Native_American,Decimal,Y,"County data, American Indian","Data Sources, Definitions, and Notes, Page 5",Percentage of Native American people
+Demographics,Asian,Decimal,Y,"County data, Asian/Pacific Islander","Data Sources, Definitions, and Notes, Page 5",Percentage of Asian people
+Demographics,Hispanic,Decimal,Y,"County data, Hispanic origin","Data Sources, Definitions, and Notes, Page 5",Percentage of Hispanic people
+SummaryMeasuresOfHealth,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
+SummaryMeasuresOfHealth,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
+SummaryMeasuresOfHealth,CHSI_County_Name,Text,N,Name of county,,""""""
+SummaryMeasuresOfHealth,CHSI_State_Name,Text,N,Name of State or District of Columbia,,""""""
+SummaryMeasuresOfHealth,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,""""""
+SummaryMeasuresOfHealth,ALE,Decimal,N,"County data, average life expectancy","Data Sources, Definitions, and Notes, Page 9",Average life expectancy
 SummaryMeasuresOfHealth,Health_Status,Decimal,Y,"County data, self-rated health status","Data Sources, Definitions, and Notes, Page 9-10",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-SummaryMeasuresOfHealth,Unhealthy_Days,Decimal,N,"County data, average number of unhealthy days in past month","Data Sources, Definitions, and Notes, Page 10",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,CHSI_County_Name,Text,N,Name of county,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,CHSI_State_Name,Text,N,Name of State or District of Columbia,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,Pap_Smear,Decimal,Y,"County data, pap smears (18+)","Data Sources, Definitions, and Notes, Page 27",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,Mammogram,Decimal,Y,"County data, mammography (50+)","Data Sources, Definitions, and Notes, Page 27",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,Proctoscopy,Decimal,Y,"County data, sigmoidoscopy (50+)","Data Sources, Definitions, and Notes, Page 27",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,Pneumo_Vax,Decimal,Y,"County data, pneumonia vaccine (65+)","Data Sources, Definitions, and Notes, Page 27",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-PreventiveServicesUse,Flu_Vac,Decimal,Y,"County data, flu vaccine (65+)","Data Sources, Definitions, and Notes, Page 27",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,CHSI_County_Name,Text,N,Name of county,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,CHSI_State_Name,Text,N,Name of State or District of Columbia,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,No_Exercise,Decimal,Y,"County data, no exercise","Data Sources, Definitions, and Notes, Page 28-29",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,Few_Fruit_Veg,Decimal,Y,"County data, few fruits/vegetables","Data Sources, Definitions, and Notes, Page 28-29",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,Obesity,Decimal,Y,"County data, obesity","Data Sources, Definitions, and Notes, Page 28-29",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,High_Blood_Pressure,Decimal,Y,"County data, high blood pressure","Data Sources, Definitions, and Notes, Page 28-29",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,Smoker,Decimal,Y,"County data, smoker","Data Sources, Definitions, and Notes, Page 28-29",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,Diabetes,Decimal,Y,"County data, diabetes","Data Sources, Definitions, and Notes, Page 28-29",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,Uninsured,Integer,N,"County data, uninsured individuals","Data Sources, Definitions, and Notes, Page 29",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,Prim_Care_Phys_Rate,Decimal,N,"County data, primary care physicians per 100,000 pop.","Data Sources, Definitions, and Notes, Page 30",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,Dentist_Rate,Decimal,N,"County data, dentists per 100,000 pop.","Data Sources, Definitions, and Notes, Page 30",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
-RiskFactorsAndAccessToCare,Community_Health_Center_Ind,Integer,N,Indicator for any Community/Migrant Health Centers located in the county,"Data Sources, Definitions, and Notes, Page 30",Health status: The percentage of adults who report 'Fair' or 'Poor' overall health
+SummaryMeasuresOfHealth,Unhealthy_Days,Decimal,N,"County data, average number of unhealthy days in past month","Data Sources, Definitions, and Notes, Page 10",The average number of unhealthy days (mental or physical) in the past month
+PreventiveServicesUse,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
+PreventiveServicesUse,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
+PreventiveServicesUse,CHSI_County_Name,Text,N,Name of county,,""""""
+PreventiveServicesUse,CHSI_State_Name,Text,N,Name of State or District of Columbia,,""""""
+PreventiveServicesUse,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,""""""
+PreventiveServicesUse,Pap_Smear,Decimal,Y,"County data, pap smears (18+)","Data Sources, Definitions, and Notes, Page 27",Percentage of adult females who have received a pap smear in the past 3 years
+PreventiveServicesUse,Mammogram,Decimal,Y,"County data, mammography (50+)","Data Sources, Definitions, and Notes, Page 27",Percentage of females aged 50 and older who have received a mammogram in the past 3 years
+PreventiveServicesUse,Pneumo_Vax,Decimal,Y,"County data, pneumonia vaccine (65+)","Data Sources, Definitions, and Notes, Page 27",The percentage of adults aged 65 years and older who have ever had a 30 pneumococcal vaccination
+PreventiveServicesUse,Flu_Vac,Decimal,Y,"County data, flu vaccine (65+)","Data Sources, Definitions, and Notes, Page 27",The percentage of adults aged 65 years and older who have had a flu shot within the past year
+RiskFactorsAndAccessToCare,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
+RiskFactorsAndAccessToCare,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
+RiskFactorsAndAccessToCare,CHSI_County_Name,Text,N,Name of county,,""""""
+RiskFactorsAndAccessToCare,CHSI_State_Name,Text,N,Name of State or District of Columbia,,""""""
+RiskFactorsAndAccessToCare,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,""""""
+RiskFactorsAndAccessToCare,No_Exercise,Decimal,Y,"County data, no exercise","Data Sources, Definitions, and Notes, Page 28-29",Percentage of adults at risk for health problems related to lack of exercise
+RiskFactorsAndAccessToCare,Few_Fruit_Veg,Decimal,Y,"County data, few fruits/vegetables","Data Sources, Definitions, and Notes, Page 28-29",Percentage of adults reporting an average fruit and vegetable consumption of less than 5 times per day
+RiskFactorsAndAccessToCare,Obesity,Decimal,Y,"County data, obesity","Data Sources, Definitions, and Notes, Page 28-29","Percentage of adults at risk for health problems related to being overweight, based on body mass index"
+RiskFactorsAndAccessToCare,Smoker,Decimal,Y,"County data, smoker","Data Sources, Definitions, and Notes, Page 28-29","Percentage of people who smoke, self-reported"
+RiskFactorsAndAccessToCare,Diabetes,Decimal,Y,"County data, diabetes","Data Sources, Definitions, and Notes, Page 28-29","Percentage of people with diabetes, self-reported"
+RiskFactorsAndAccessToCare,Uninsured,Integer,N,"County data, uninsured individuals","Data Sources, Definitions, and Notes, Page 29",The estimated number of uninsured individuals
+RiskFactorsAndAccessToCare,Prim_Care_Phys_Rate,Decimal,N,"County data, primary care physicians per 100,000 pop.","Data Sources, Definitions, and Notes, Page 30","Total number of active, non-federal physicians per 100,000 population"
+RiskFactorsAndAccessToCare,Dentist_Rate,Decimal,N,"County data, dentists per 100,000 pop.","Data Sources, Definitions, and Notes, Page 30","Total number of active dentists per 100,000 population"
