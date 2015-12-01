@@ -129,7 +129,7 @@ function updateScatterplot(fileName, yParameter) {
     //Setting up the circles
     var circlesGroup = d3.select("#circles");
     var circles = circlesGroup.selectAll("circle")
-        .data(xyData);
+        .data(xyData.filter(function (d) {return (d.xValue != 0 && d.yValue != 0)}));
     var radius = 2;
 
     circles.exit().remove();
@@ -140,8 +140,8 @@ function updateScatterplot(fileName, yParameter) {
     circles.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
-    circles.attr("cy", function(d) {if (d.yValue != 0 && d.xValue != 0) return yScale(d.yValue); else return null})
-        .attr("cx", function(d) {if (d.yValue != 0 && d.xValue != 0) return xScale(d.xValue); else return null})
+    circles.attr("cy", function(d) {return yScale(d.yValue)})
+        .attr("cx", function(d) {return xScale(d.xValue)})
         .attr("r", radius)
         .style("fill", function (d) {return "blue"});
 }
