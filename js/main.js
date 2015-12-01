@@ -140,14 +140,9 @@ function updateScatterplot(fileName, yParameter) {
     circles.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
-    circles.attr("cy", function(d) {return yScale(d.yValue)})
-        //.attr("transform", function (d) {return "translate(" + xScale(d.Date) + ",0)";})
-        .attr("cx", function(d) {return xScale(d.xValue)})
+    circles.attr("cy", function(d) {if (d.yValue != 0 && d.xValue != 0) return yScale(d.yValue); else return null})
+        .attr("cx", function(d) {if (d.yValue != 0 && d.xValue != 0) return xScale(d.xValue); else return null})
         .attr("r", radius)
-        //function (d) {
-        //    return svgBounds.height - yScale(d.attendance) - xAxisSize;
-        //})
-        //.attr("width", xScale.rangeBand())
         .style("fill", function (d) {return "blue"});
 }
 
