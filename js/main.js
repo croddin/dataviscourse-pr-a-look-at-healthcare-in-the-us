@@ -9,6 +9,10 @@ function selectDataset(fileSelector, colSelector, selectionChangedMap, selection
                 .filter((d)=>d.PAGE_NAME == file_name)
                 .filter((d)=>d.DATA_TYPE != "Text")
                 .map((d)=>d.COLUMN_NAME)
+        var descriptions = data_index
+                .filter((d)=>d.PAGE_NAME == file_name)
+                .filter((d)=>d.DATA_TYPE != "Text")
+                .map((d)=>d.LONG_DESCRIPTION)
         setSelectBox(colSelector, col_names, function(col_name){
             downloadData(file_name,col_name,selectionChangedMap);
             downloadData(file_name,col_name,selectionChangedScatterplot);
@@ -57,7 +61,7 @@ function setHover(d) {
             .duration(200)
             .style("opacity", .9);
 
-        div.html(d.countyStateName + "<br />" + "Health status:" + d.xValue + "%")
+        div.html(d.countyStateName + "<br />" + "'Fair' or 'Poor' health: " + d.xValue + "%")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 30) + "px");
     }
@@ -73,7 +77,7 @@ function clearHover() {
 }
 
 function updateScatterplot(fileName, yParameter) {
-    //x Axis doesn't change - Summary Measures of health
+    //x Axis doesn't change - self-reported health status
     xData = files.get("SummaryMeasuresOfHealth");
     xVarById = d3.map();
     xData.forEach(d=>xVarById.set(getFipsCodeFromRow(d), getVarFromRow(d,"Health_Status")));
@@ -100,15 +104,16 @@ function updateScatterplot(fileName, yParameter) {
 
     var svgBounds = document.getElementById("scatterplot").getBoundingClientRect(),
         xAxisSize = 50,
-        yAxisSize = 50;
+        yAxisSize = 80,
+        padding = 30;
 
     var xScale = d3.scale.linear() //lin or log
         .domain(d3.extent(xVarById.values()))
-        .range([yAxisSize, svgBounds.width]);
+        .range([yAxisSize, svgBounds.width - padding]);
 
     var yScale = d3.scale.linear() //lin or log
         .domain(d3.extent(yVarById.values()))
-        .range([svgBounds.height - xAxisSize, 0]);
+        .range([svgBounds.height - xAxisSize, padding]);
 
     var xGroup = d3.select("#xAxis");
     var xAxis = d3.svg.axis()
@@ -117,6 +122,16 @@ function updateScatterplot(fileName, yParameter) {
     d3.select("#xAxis")
         .attr("transform", "translate(0," + (svgBounds.height - xAxisSize) + ")")
         .call(xAxis);
+
+    //Creating label for x axis
+    var xAxisLabel = d3.select("#xAxisLabel");
+
+    xAxisLabel.append("text")
+        //.attr("text-anchor", "end")
+        .attr("x", yAxisSize - 5)
+        .attr("y", svgBounds.height - 15)
+        .html("Health status: The percentage of adults who report 'Fair' or 'Poor' overall health")
+        .style("font-size", ".8em");
 
     var yGroup = d3.select("#yAxis");
     var yAxis = d3.svg.axis()
