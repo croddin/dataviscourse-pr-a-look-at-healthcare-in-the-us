@@ -13,22 +13,25 @@ function selectDataset(fileSelector, colSelector, selectionChangedMap, selection
                 .filter((d)=>d.PAGE_NAME == file_name)
                 .filter((d)=>d.DATA_TYPE != "Text")
                 .map((d)=>d.LONG_DESCRIPTION)
+        descriptionMap = d3.map();
+        col_names.forEach((d, i)=>descriptionMap.set(col_names[i], descriptions[i]));
         setSelectBox(colSelector, col_names, function(col_name){
-            downloadData(file_name,col_name,selectionChangedMap);
-            downloadData(file_name,col_name,selectionChangedScatterplot);
+            var desc = descriptionMap.get(col_name);
+            downloadData(file_name,col_name,desc,selectionChangedMap);
+            downloadData(file_name,col_name,desc,selectionChangedScatterplot);
     })
   })
 }
 
-function downloadData(file_name,col_name,callback){
+function downloadData(file_name,col_name,desc,callback){
   if(files.has(file_name)){
-    callback(file_name,col_name)
+    callback(file_name,col_name,desc)
   } else {
     queue()
       .defer(d3.csv, "data/chsi_dataset/"+file_name.toUpperCase()+".csv")
       .await((error, d)=>{
         files.set(file_name,d)
-        callback(file_name,col_name)})
+        callback(file_name,col_name,desc)})
   }
 }
 
@@ -76,7 +79,7 @@ function clearHover() {
     setHover(null);
 }
 
-function updateScatterplot(fileName, yParameter) {
+function updateScatterplot(fileName, yParameter, desc) {
     //x Axis doesn't change - self-reported health status
     xData = files.get("SummaryMeasuresOfHealth");
     xVarById = d3.map();
@@ -91,7 +94,6 @@ function updateScatterplot(fileName, yParameter) {
     countyStateNames = d3.map();
     xData.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name") + ", " + getCountyStateNames(d, "CHSI_State_Abbr")));
 
-
     var xyData = [];
 
     xVarById.keys().forEach((i)=>{
@@ -104,7 +106,7 @@ function updateScatterplot(fileName, yParameter) {
 
     var svgBounds = document.getElementById("scatterplot").getBoundingClientRect(),
         xAxisSize = 50,
-        yAxisSize = 80,
+        yAxisSize = 100,
         padding = 30;
 
     var xScale = d3.scale.linear() //lin or log
@@ -126,9 +128,11 @@ function updateScatterplot(fileName, yParameter) {
     //Creating label for x axis
     var xAxisLabel = d3.select("#xAxisLabel");
 
+    xAxisLabel.selectAll("text").remove();
+
     xAxisLabel.append("text")
-        //.attr("text-anchor", "end")
-        .attr("x", yAxisSize - 5)
+        .attr("text-anchor", "middle")
+        .attr("x", svgBounds.width / 2)
         .attr("y", svgBounds.height - 15)
         .html("Health status: The percentage of adults who report 'Fair' or 'Poor' overall health")
         .style("font-size", ".8em");
@@ -140,6 +144,19 @@ function updateScatterplot(fileName, yParameter) {
     d3.select("#yAxis")
         .attr("transform", "translate(" + yAxisSize + ",0)")
         .call(yAxis);
+
+    //Creating label for y axis
+    var yAxisLabel = d3.select("#yAxisLabel");
+
+    yAxisLabel.selectAll("text").remove();
+
+    yAxisLabel.append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 18)
+        .attr("x",0 - (svgBounds.height / 2))
+        .html(desc)
+        .style("font-size", ".8em");
 
     //Setting up the circles
     var circlesGroup = d3.select("#circles");
@@ -161,7 +178,7 @@ function updateScatterplot(fileName, yParameter) {
         .style("fill", function (d) {return "blue"});
 }
 
-function updateMap(fileName, colName){
+function updateMap(fileName, colName, desc){
     data = files.get(fileName);
     varById = d3.map();
     data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,colName)));
@@ -198,8 +215,8 @@ function setup(error, data_index, us){
     window.data_index = data_index;
     window.us = us;
 
-    downloadData("SummaryMeasuresOfHealth", "Health_Status", updateMap);
-    downloadData("RiskFactorsAndAccessToCare", "Obesity", updateScatterplot);
+    downloadData("SummaryMeasuresOfHealth", "Health_Status", "Health status: The percentage of adults who report 'Fair' or 'Poor' overall health", updateMap);
+    downloadData("RiskFactorsAndAccessToCare", "Obesity", "Percentage of adults at classified as obese according to BMI", updateScatterplot);
 
     selectDataset("#map-data-section", "#map-data-column", updateMap, updateScatterplot);
 }

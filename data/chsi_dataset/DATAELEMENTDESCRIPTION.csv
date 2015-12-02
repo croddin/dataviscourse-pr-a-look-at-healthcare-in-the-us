@@ -30,17 +30,17 @@ PreventiveServicesUse,CHSI_County_Name,Text,N,Name of county,,""""""
 PreventiveServicesUse,CHSI_State_Name,Text,N,Name of State or District of Columbia,,""""""
 PreventiveServicesUse,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,""""""
 PreventiveServicesUse,Pap_Smear,Decimal,Y,"County data, pap smears (18+)","Data Sources, Definitions, and Notes, Page 27",Percentage of adult females who have received a pap smear in the past 3 years
-PreventiveServicesUse,Mammogram,Decimal,Y,"County data, mammography (50+)","Data Sources, Definitions, and Notes, Page 27",Percentage of females aged 50 and older who have received a mammogram in the past 3 years
-PreventiveServicesUse,Pneumo_Vax,Decimal,Y,"County data, pneumonia vaccine (65+)","Data Sources, Definitions, and Notes, Page 27",The percentage of adults aged 65 years and older who have ever had a 30 pneumococcal vaccination
-PreventiveServicesUse,Flu_Vac,Decimal,Y,"County data, flu vaccine (65+)","Data Sources, Definitions, and Notes, Page 27",The percentage of adults aged 65 years and older who have had a flu shot within the past year
+PreventiveServicesUse,Mammogram,Decimal,Y,"County data, mammography (50+)","Data Sources, Definitions, and Notes, Page 27",Percentage of females 50+  who have received a mammogram in the past 3 years
+PreventiveServicesUse,Pneumo_Vax,Decimal,Y,"County data, pneumonia vaccine (65+)","Data Sources, Definitions, and Notes, Page 27",The percentage of adults 65+ who have ever had a pneumococcal vaccination
+PreventiveServicesUse,Flu_Vac,Decimal,Y,"County data, flu vaccine (65+)","Data Sources, Definitions, and Notes, Page 27",The percentage of adults 65+ who have had a flu shot within the past year
 RiskFactorsAndAccessToCare,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
 RiskFactorsAndAccessToCare,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6",""""""
 RiskFactorsAndAccessToCare,CHSI_County_Name,Text,N,Name of county,,""""""
 RiskFactorsAndAccessToCare,CHSI_State_Name,Text,N,Name of State or District of Columbia,,""""""
 RiskFactorsAndAccessToCare,CHSI_State_Abbr,Text,N,Two-character postal abbreviation for state name,,""""""
 RiskFactorsAndAccessToCare,No_Exercise,Decimal,Y,"County data, no exercise","Data Sources, Definitions, and Notes, Page 28-29",Percentage of adults at risk for health problems related to lack of exercise
-RiskFactorsAndAccessToCare,Few_Fruit_Veg,Decimal,Y,"County data, few fruits/vegetables","Data Sources, Definitions, and Notes, Page 28-29",Percentage of adults reporting an average fruit and vegetable consumption of less than 5 times per day
-RiskFactorsAndAccessToCare,Obesity,Decimal,Y,"County data, obesity","Data Sources, Definitions, and Notes, Page 28-29","Percentage of adults at risk for health problems related to being overweight, based on body mass index"
+RiskFactorsAndAccessToCare,Few_Fruit_Veg,Decimal,Y,"County data, few fruits/vegetables","Data Sources, Definitions, and Notes, Page 28-29",Percentage of adults reporting eating fewer than 5 fruits and vegetables a day
+RiskFactorsAndAccessToCare,Obesity,Decimal,Y,"County data, obesity","Data Sources, Definitions, and Notes, Page 28-29",Percentage of adults at classified as obese according to BMI
 RiskFactorsAndAccessToCare,Smoker,Decimal,Y,"County data, smoker","Data Sources, Definitions, and Notes, Page 28-29","Percentage of people who smoke, self-reported"
 RiskFactorsAndAccessToCare,Diabetes,Decimal,Y,"County data, diabetes","Data Sources, Definitions, and Notes, Page 28-29","Percentage of people with diabetes, self-reported"
 RiskFactorsAndAccessToCare,Uninsured,Integer,N,"County data, uninsured individuals","Data Sources, Definitions, and Notes, Page 29",The estimated number of uninsured individuals
