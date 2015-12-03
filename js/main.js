@@ -115,8 +115,8 @@ function updateScatterplot(fileName, yParameter, desc) {
           xValue: xVarById.get(i),
           yValue: yVarById.get(i),
           countyStateName: countyStateNames.get(i)
-      });
-    })
+      })
+    )
 
     var svgBounds = document.getElementById("scatterplot").getBoundingClientRect(),
         xAxisSize = 50,
