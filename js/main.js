@@ -79,6 +79,20 @@ function clearHover() {
     setHover(null);
 }
 
+function updateBarChart(fileName, parameter, desc) {
+    data = files.get(fileName);
+    varById = d3.map();
+    data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,parameter)));
+
+    var highestArray = [];
+
+    for (var i = 0; i < 19; i++) {
+        highestArray[i];
+    }
+
+    console.log(highestArray);
+}
+
 function updateScatterplot(fileName, yParameter, desc) {
     //x Axis doesn't change - self-reported health status
     xData = files.get("SummaryMeasuresOfHealth");
@@ -96,7 +110,7 @@ function updateScatterplot(fileName, yParameter, desc) {
 
     var xyData = [];
 
-    xVarById.keys().forEach((i)=>{
+    xVarById.keys().forEach((i)=>
       xyData.push({
           xValue: xVarById.get(i),
           yValue: yVarById.get(i),
@@ -153,7 +167,7 @@ function updateScatterplot(fileName, yParameter, desc) {
     yAxisLabel.append("text")
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
-        .attr("y", 18)
+        .attr("y", 23)
         .attr("x",0 - (svgBounds.height / 2))
         .html(desc)
         .style("font-size", ".8em");
@@ -187,6 +201,11 @@ function updateMap(fileName, colName, desc){
     countyStateNames = d3.map();
     data.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name") + ", " + getCountyStateNames(d, "CHSI_State_Abbr")));
 
+    //Set map h2
+    var mapDesc = d3.select("#mapDesc");
+
+    mapDesc.text(desc);
+
     var dScale = d3.scale.linear() //lin or log
         .domain(d3.extent(varById.values()))
         .range([0,1]);
@@ -217,6 +236,7 @@ function setup(error, data_index, us){
 
     downloadData("SummaryMeasuresOfHealth", "Health_Status", "Health status: The percentage of adults who report 'Fair' or 'Poor' overall health", updateMap);
     downloadData("RiskFactorsAndAccessToCare", "Obesity", "Percentage of adults at classified as obese according to BMI", updateScatterplot);
+    downloadData("SummaryMeasuresOfHealth", "Health_Status", "Health status: The percentage of adults who report 'Fair' or 'Poor' overall health", updateBarChart);
 
     selectDataset("#map-data-section", "#map-data-column", updateMap, updateScatterplot);
 }

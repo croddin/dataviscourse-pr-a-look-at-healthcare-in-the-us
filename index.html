@@ -26,12 +26,17 @@
     <div id="tooltip"></div>
 
     <br />
-	<!--<svg id="scatterplot"></svg>
-	<label>Scatterplot X axis:</label>
-	<label>Scatterplot Y axis:</label>-->
+
+    <h2>Map depicting <span id="mapDesc"></span> by county</h2>
     <svg id="map" width="960" height="600">
     <g class="counties"></g>
     <path class="states"></path>
+    </svg>
+    <br />
+    <div>The more saturated a county appears, the higher its percentage or total number.</div>
+
+    <svg id="barChart" width="400" height="600">
+        <g id="bars"></g>
     </svg>
 
   <script src="js/main.js"></script>
