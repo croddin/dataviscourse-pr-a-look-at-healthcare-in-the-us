@@ -13,12 +13,9 @@ function selectDataset(fileSelector, colSelector, selectionChangedMap, selection
                 .filter((d)=>d.PAGE_NAME == file_name)
                 .filter((d)=>d.DATA_TYPE != "Text")
                 .map((d)=>d.LONG_DESCRIPTION)
-        descriptionMap = d3.map();
-        col_names.forEach((d, i)=>descriptionMap.set(col_names[i], descriptions[i]));
         setSelectBox(colSelector, col_names, function(col_name){
-            var desc = descriptionMap.get(col_name);
-            downloadData(file_name,col_name,desc,selectionChangedMap);
-            downloadData(file_name,col_name,desc,selectionChangedScatterplot);
+            downloadData(file_name,col_name,selectionChangedMap);
+            downloadData(file_name,col_name,selectionChangedScatterplot);
     })
   })
 }
