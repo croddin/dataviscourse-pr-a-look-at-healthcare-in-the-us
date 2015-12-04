@@ -79,6 +79,9 @@ function clearHover() {
 function updateBarChart(fileName, parameter, desc) {
     //Getting the appropriate data.
     var valuesArray = [];
+    var highestValues = [];
+    var lowestValues = [];
+
     nameMap = d3.map();
 
     data = files.get(fileName);
@@ -96,17 +99,23 @@ function updateBarChart(fileName, parameter, desc) {
         }
     });
 
-    var highestValues = [];
-
     for (var i = 0; i < 20; i++) {
         highestValues.push(valuesArray[i]);
     }
 
+    valuesArray.reverse();
+
+    valuesArray.forEach(function(d) {
+        if (d[1] != 0) {
+            lowestValues.push(d);
+        }
+    });
+
+    lowestValues = lowestValues.slice(0, 20);
+
     var max = highestValues[0][1];
 
     highestValues.reverse();
-
-    var min = highestValues[0][1];
 
     //Setting up the axes
     var svgBounds = document.getElementById("ubarChart").getBoundingClientRect(),
@@ -117,41 +126,68 @@ function updateBarChart(fileName, parameter, desc) {
     var xScale = d3.scale.linear().range([0, svgBounds.width - yAxisSize - 5]).domain([0, max]);
     var yScale = d3.scale.ordinal().rangeBands([svgBounds.height - xAxisSize, 0], 0.1).domain(d3.range(0, 20));
 
-    var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
-    var yAxis = d3.svg.axis().scale(yScale).orient("left");
+    var xUAxis = d3.svg.axis().scale(xScale).orient("bottom");
+    var yUAxis = d3.svg.axis().scale(yScale).orient("left");
+
+    var xHAxis = d3.svg.axis().scale(xScale).orient("bottom");
+    var yHAxis = d3.svg.axis().scale(yScale).orient("left");
 
     d3.select("#xuAxisBar")
         .attr("transform", "translate(" + yAxisSize + ", " + (svgBounds.height - xAxisSize) + ")")
-        .call(xAxis);
+        .call(xUAxis);
 
-    var yBar = d3.select("#yuAxisBar")
+    d3.select("#xhAxisBar")
+        .attr("transform", "translate(" + yAxisSize + ", " + (svgBounds.height - xAxisSize) + ")")
+        .call(xHAxis);
+
+    var yUBar = d3.select("#yuAxisBar")
         .attr("transform", "translate(" + yAxisSize + ", 0)")
-        .call(yAxis);
+        .call(yUAxis);
 
-    yBar.selectAll("text")
+    yUBar.selectAll("text")
         .style("text-anchor", "end")
         .text(function (d, i) {
-
             return nameMap.get(highestValues[i][0]);
         });
 
+    var yHBar = d3.select("#yhAxisBar")
+        .attr("transform", "translate(" + yAxisSize + ", 0)")
+        .call(yHAxis);
+
+    yHBar.selectAll("text")
+        .style("text-anchor", "end")
+        .text(function (d, i) {
+            return nameMap.get(lowestValues[i][0]);
+        });
+
     //Drawing the bars
-    var barsGroup = d3.select("#ubars");
+    var barsUGroup = d3.select("#ubars");
+    var barsHGroup = d3.select("#hbars");
 
-    var bars = barsGroup.selectAll("rect")
+    var ubars = barsUGroup.selectAll("rect")
         .data(highestValues);
+    var hbars = barsHGroup.selectAll("rect")
+        .data(lowestValues);
 
-    bars.exit().remove();
+    ubars.exit().remove();
+    hbars.exit().remove();
 
-    bars.enter()
+    ubars.enter()
+        .append("rect");
+    hbars.enter()
         .append("rect");
 
-    bars.attr("height", yScale.rangeBand())
+    ubars.attr("height", yScale.rangeBand())
         .attr("y", function(d, i) {return yScale(i)})
         .attr("width", function(d) {return xScale(d[1])})
         .attr("x", yAxisSize)
         .style("fill", function (d) {return "blue"});
 
+    hbars.attr("height", yScale.rangeBand())
+        .attr("y", function(d, i) {return yScale(i)})
+        .attr("width", function(d) {return xScale(d[1])})
+        .attr("x", yAxisSize)
+        .style("fill", function (d) {return "blue"});
 }
 
 function updateScatterplot(fileName, yParameter, desc) {
