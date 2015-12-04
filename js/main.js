@@ -72,16 +72,17 @@ function setHover(d) {
             .duration(200)
             .style("opacity", .9);
 
-        var countyStateName, xValue
+        var countyStateName, text
         if(d.type == "Feature"){ //Map hover
           countyStateName = countyStateNames.get(d.id)
-          xValue = varById.get(d.id)
+          var xText = d.cValue == 0 ? "Unknown" : d.cValue
+          text = descriptionFromColName(currentFile,currentCol) + ": "+xText
         } else { //scatterplot Hover
           countyStateName = d.countyStateName
-          xValue = d.xValue
+          text = "'Fair' or 'Poor' health: " + d.xValue + "%"
         }
 
-        div.html(countyStateName + "<br />" + "'Fair' or 'Poor' health: " + xValue + "%")
+        div.html(countyStateName + "<br />" + text)
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 30) + "px");
     }
@@ -303,7 +304,6 @@ function updateScatterplot(fileName, yParameter) {
 
     circles.enter().append("circle")
       .attr("cy", function(d) {return yScale(0)})
-      .attr("cx", function(d) {return xScale(0)})
 
     circles.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
@@ -319,13 +319,14 @@ function updateScatterplot(fileName, yParameter) {
         .transition()
         .duration(1000)
         .attr("cy", function(d) {return yScale(0)})
-        .attr("cx", function(d) {return xScale(0)})
         .remove();
 }
 
 function updateMap(fileName, colName){
     var data = files.get(fileName);
-    varById = d3.map();
+    var varById = d3.map();
+    window.currentFile = fileName
+    window.currentCol = colName
     data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,colName)));
 
     //County names
@@ -345,8 +346,12 @@ function updateMap(fileName, colName){
         .translate([map.attr("width") / 2, map.attr("height") / 2]);
     var path = d3.geo.path()
         .projection(projection);
-    var mapdata = topojson.feature(us, us.objects.counties).features
-    var counties = map.select(".counties").selectAll("path")
+    window.mapdata = topojson.feature(us, us.objects.counties).features
+    mapdata.forEach((d)=>{
+      d.cValue = varById.get(d.id)
+    })
+
+    window.counties = map.select(".counties").selectAll("path")
         .data(mapdata, (d)=>d.id)
     counties.enter().append("path").attr("d", path)
     counties.style("fill", (d)=>cInterp(dScale(varById.get(d.id))));
@@ -361,7 +366,6 @@ function updateMap(fileName, colName){
       if(selectedCounties.length > 2){
         selectedCounties = selectedCounties.slice(-2)
       }
-      console.log(selectedCounties.map((i)=>countyStateNames.get(i)))
     })
 
     map.select(".states")
