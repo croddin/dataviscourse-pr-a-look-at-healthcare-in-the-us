@@ -343,7 +343,7 @@ function updateScatterplot(fileName, yParameter) {
       .attr("cy", function(d) {return yScale(0)})
       .attr("cx", function(d) {return xScale(0)})
 
-    circles.on("mouseover", function (d) {setHover(d, humanNameFromColName(fileName,yParameter), isColPercentage(fileName, yParameter))})
+    circles.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
     circles.attr("cy", function(d) {return yScale(d.yValue)})
@@ -396,7 +396,7 @@ function updateMap(fileName, colName){
     counties.enter().append("path").attr("d", path)
     counties.style("fill", (d)=>cInterp(dScale(varById.get(d.id))));
 
-    counties.on("mouseover", function (d) {setHover(d, humanNameFromColName(fileName, colName), isColPercentage(fileName, colName))})
+    counties.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
     counties.on("click", function(d){
