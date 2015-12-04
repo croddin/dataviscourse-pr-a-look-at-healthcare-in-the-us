@@ -66,7 +66,6 @@ function getCountyStateNames(data){
 
 function setHover(d) {
     var div = d3.select("#tooltip");
-    console.log("d",d)
     if (d != null) {
         div.transition()
             .duration(200)
@@ -298,7 +297,7 @@ function updateScatterplot(fileName, yParameter) {
 
     //Setting up the circles
     var circlesGroup = d3.select("#circles");
-    var circles = circlesGroup.selectAll("circle")
+    window.circles = circlesGroup.selectAll("circle")
         .data(xyData.filter(function (d) {return (d.xValue != 0 && d.yValue != 0)}), (d)=>d.id);
     var radius = 2;
 
@@ -306,7 +305,8 @@ function updateScatterplot(fileName, yParameter) {
       .attr("cy", function(d) {return yScale(0)})
 
     circles.on("mouseover", function (d) {setHover(d)})
-        .on("mouseout", function (d) {clearHover()});
+        .on("mouseout", function (d) {clearHover()})
+        .on("click", selectCounty)
 
     circles
         .attr("r", radius)
@@ -315,11 +315,12 @@ function updateScatterplot(fileName, yParameter) {
         .attr("cy", function(d) {return yScale(d.yValue)})
         .attr("cx", function(d) {return xScale(d.xValue)})
 
-    circles.exit().attr("opacity", 1)
+    circles.exit()
         .transition()
         .duration(1000)
         .attr("cy", function(d) {return yScale(0)})
         .remove();
+    updateSelection()
 }
 
 function updateMap(fileName, colName){
@@ -359,21 +360,43 @@ function updateMap(fileName, colName){
     counties.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
-    counties.on("click", function(d){
-      if(!selectedCounties.includes(d.id)){
-        selectedCounties.push(d.id)
-      }
-      if(selectedCounties.length > 2){
-        selectedCounties = selectedCounties.slice(-2)
-      }
-    })
+    counties.on("click", selectCounty)
 
     map.select(".states")
         .datum(topojson.mesh(us, us.objects.states,(a, b)=> a !== b))
         .attr("d", path);
 }
 
+function selectCounty(d){
+  var id = parseInt(d.id)
+  if(!selectedCounties.includes(id)){
+    selectedCounties.push(id)
+  }
+  if(selectedCounties.length > 2){
+    selectedCounties = selectedCounties.slice(-2)
+  }
+  updateSelection()
+}
+
 function updateSelection(){
+  var compareMode = selectedCounties.length != 0
+  window.counties
+    .attr("opacity",(d)=> !compareMode || selectedCounties.includes(d.id) ? 1 : .1)
+  window.circles
+    .attr("r",(d)=> compareMode && selectedCounties.includes(parseInt(d.id))? 10 : 2)
+    .attr("opacity",(d)=> !compareMode || selectedCounties.includes(parseInt(d.id)) ? 1 : .1)
+}
+
+function clearSelection(){
+  selectedCounties = []
+  updateSelection()
+}
+
+function updateComparision(){
+  var ca = selectedCounties[0]
+  var cb = selectedCounties[1]
+
+
 
 }
 
