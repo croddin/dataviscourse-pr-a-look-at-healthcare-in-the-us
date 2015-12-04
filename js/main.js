@@ -8,19 +8,6 @@ function descriptionFromColName(file_name, col_name){
     .filter((d)=>d.COLUMN_NAME == col_name)[0].LONG_DESCRIPTION
 }
 
-function isColPercentage(file_name, col_name){
-    if (data_index.filter((d)=>d.PAGE_NAME == file_name).filter((d)=>d.COLUMN_NAME == col_name)[0].IS_PERCENT_DATA === "Y")
-        return true;
-    else
-        return false;
-}
-
-function humanNameFromColName(file_name, col_name){
-    return data_index
-            .filter((d)=>d.PAGE_NAME == file_name)
-            .filter((d)=>d.COLUMN_NAME == col_name)[0].HUMAN_COLNAME
-}
-
 function downloadData(file_name,col_name,callback){
   if(files.has(file_name)){
     callback(file_name,col_name)
@@ -77,8 +64,7 @@ function getCountyStateNames(data){
   return countyStateNames
 }
 
-//Comma formatting from http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
-function setHover(d, colName, isPercent) {
+function setHover(d) {
     var div = d3.select("#tooltip");
     console.log("d",d)
     if (d != null) {
@@ -86,55 +72,32 @@ function setHover(d, colName, isPercent) {
             .duration(200)
             .style("opacity", .9);
 
-        var countyStateName, xValue, yValue;
+        var countyStateName, xValue
         if(d.type == "Feature"){ //Map hover
-          countyStateName = countyStateNames.get(d.id);
-          xValue = varById.get(d.id);
-            if (isPercent) {
-                div.html(countyStateName + "<br />" + colName + ": " + xValue + "%");
-            }
-            else {
-                var parts = xValue.toString().split(".");
-                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                xValue = parts.join(".");
-
-                div.html(countyStateName + "<br />" + colName + ": " + xValue);
-            }
+          countyStateName = countyStateNames.get(d.id)
+          xValue = varById.get(d.id)
         } else { //scatterplot Hover
-          countyStateName = d.countyStateName;
-          xValue = d.xValue;
-            yValue = d.yValue;
-            if (isPercent) {
-                div.html(countyStateName + "<br />" + "'Fair' or 'Poor' health: " + xValue + "%"
-                    + "<br />" + colName + ": " + d.yValue + "%");
-            }
-            else {
-                var parts = yValue.toString().split(".");
-                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                yValue = parts.join(".");
-
-                div.html(countyStateName + "<br />" + "'Fair' or 'Poor' health: " + xValue + "%"
-                    + "<br />" + colName + ": " + yValue);
-            }
+          countyStateName = d.countyStateName
+          xValue = d.xValue
         }
 
-        div.style("left", (d3.event.pageX) + "px")
+        div.html(countyStateName + "<br />" + "'Fair' or 'Poor' health: " + xValue + "%")
+            .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 30) + "px");
     }
     else {
-        div.html("")
-            .transition()
+        div.transition()
             .duration(500)
             .style("opacity", 0);
     }
 }
 
 function clearHover() {
-    setHover(null, null);
+    setHover(null);
 }
 
 function updateBarChart(fileName, parameter) {
-    var desc = descriptionFromColName(fileName, parameter);
+    var desc = descriptionFromColName(fileName, parameter)
     //Getting the appropriate data.
     var valuesArray = [];
     var highestValues = [];
@@ -339,7 +302,7 @@ function updateScatterplot(fileName, yParameter) {
 
     circles.enter().append("circle");
 
-    circles.on("mouseover", function (d) {setHover(d, humanNameFromColName(fileName,yParameter), isColPercentage(fileName, yParameter))})
+    circles.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
     circles.attr("cy", function(d) {return yScale(d.yValue)})
@@ -350,7 +313,10 @@ function updateScatterplot(fileName, yParameter) {
         .transition().duration(2000)
         .attr("opacity", 1);
 
-    circles.exit()
+    circles.exit().attr("opacity", 1)
+        .transition()
+        .duration(3000)
+        .attr("opacity", 0)
         .remove();
 }
 
@@ -382,7 +348,7 @@ function updateMap(fileName, colName){
     counties.enter().append("path").attr("d", path)
     counties.style("fill", (d)=>cInterp(dScale(varById.get(d.id))));
 
-    counties.on("mouseover", function (d) {setHover(d, humanNameFromColName(fileName, colName), isColPercentage(fileName, colName))})
+    counties.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
     counties.on("click", function(d){
