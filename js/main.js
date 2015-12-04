@@ -91,7 +91,7 @@ function setHover(d) {
         if(d.type == "Feature"){ //Map hover
             countyStateName = countyStateNames.get(d.id);
             var xText = d.cValue == 0 ? "Not reported" : d.cValue;
-            if (isPercent) {
+            if (isPercent && xText != "Not reported") {
                 div.html(countyStateName + "<br />" + colName + ": "+ xText + "%");
             }
             else {
@@ -105,7 +105,7 @@ function setHover(d) {
           countyStateName = d.countyStateName;
           xValue = d.xValue;
             yValue = d.yValue;
-            if (isPercent) {
+            if (isPercent && xText != "Not reported") {
                 div.html(countyStateName + "<br />" + "'Fair' or 'Poor' health: " + xValue + "%"
                     + "<br />" + colName + ": " + d.yValue + "%");
             }
@@ -280,6 +280,8 @@ function updateScatterplot(fileName, yParameter) {
           id:i
       })
     )
+
+    d3.select("#scatterDesc").text(humanNameFromColName(fileName, yParameter));
 
     var svgBounds = document.getElementById("scatterplot").getBoundingClientRect(),
         xAxisSize = 50,

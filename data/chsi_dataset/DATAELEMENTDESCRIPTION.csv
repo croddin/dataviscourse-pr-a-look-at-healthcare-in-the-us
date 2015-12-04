@@ -11,11 +11,11 @@ Demographics,Age_19_Under,Decimal,Y,"County data, population under age 19","Data
 Demographics,Age_19_64,Decimal,Y,"County data, population age 19-64","Data Sources, Definitions, and Notes, Page 5",Percentage of the population between the ages of 19 and 64,Population between 19-64
 Demographics,Age_65_84,Decimal,Y,"County data, population age 65-84","Data Sources, Definitions, and Notes, Page 5",Percentage of the population between the ages of 65 and 84,Population between 65-84
 Demographics,Age_85_and_Over,Decimal,Y,"County data, population age 85+","Data Sources, Definitions, and Notes, Page 5",Percentage of the population over the age of 85,Population over 85
-Demographics,White,Decimal,Y,"County data, White","Data Sources, Definitions, and Notes, Page 5",Percentage of non-Hispanic white people,Hispanic
-Demographics,Black,Decimal,Y,"County data, Black","Data Sources, Definitions, and Notes, Page 5",Percentage of African-American people,African-American
-Demographics,Native_American,Decimal,Y,"County data, American Indian","Data Sources, Definitions, and Notes, Page 5",Percentage of Native American people,Native American
-Demographics,Asian,Decimal,Y,"County data, Asian/Pacific Islander","Data Sources, Definitions, and Notes, Page 5",Percentage of Asian people,Asian
-Demographics,Hispanic,Decimal,Y,"County data, Hispanic origin","Data Sources, Definitions, and Notes, Page 5",Percentage of Hispanic people,Hispanic
+Demographics,White,Decimal,Y,"County data, White","Data Sources, Definitions, and Notes, Page 5",Percentage of non-Hispanic white people,Percentage of white people
+Demographics,Black,Decimal,Y,"County data, Black","Data Sources, Definitions, and Notes, Page 5",Percentage of African-American people,Percentage of African-American people
+Demographics,Native_American,Decimal,Y,"County data, American Indian","Data Sources, Definitions, and Notes, Page 5",Percentage of Native American people,Percentage of Native American people
+Demographics,Asian,Decimal,Y,"County data, Asian/Pacific Islander","Data Sources, Definitions, and Notes, Page 5",Percentage of Asian people,Percentage of Asian people
+Demographics,Hispanic,Decimal,Y,"County data, Hispanic origin","Data Sources, Definitions, and Notes, Page 5",Percentage of Hispanic people,Percentage of Hispanic people
 SummaryMeasuresOfHealth,State_FIPS_Code,Text,N,"Two-digit state identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6","""""",""""""
 SummaryMeasuresOfHealth,County_FIPS_Code,Text,N,"Three-digit county identifier, developed by the National Bureau of Standards","Data Sources, Definitions, and Notes, Page 6","""""",""""""
 SummaryMeasuresOfHealth,CHSI_County_Name,Text,N,Name of county,,"""""",""""""
