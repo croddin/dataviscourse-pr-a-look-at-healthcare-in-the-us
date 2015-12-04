@@ -1,20 +1,6 @@
 var files = d3.map();
 var cInterp = d3.interpolateHsl(d3.rgb(247,251,255),d3.rgb(8,48,107));
 var selectedCounties = []
-//will call selectionChanged(filename, columnname)
-function selectDataset(fileSelector, colSelector, selectionChangedMap, selectionChangedScatterplot){
-    var file_names = d3.set(data_index.map((d)=>d.PAGE_NAME)).values()
-    setSelectBox(fileSelector, file_names, function(file_name){
-        var col_names = data_index
-                .filter((d)=>d.PAGE_NAME == file_name)
-                .filter((d)=>d.DATA_TYPE != "Text")
-                .map((d)=>d.COLUMN_NAME)
-        setSelectBox(colSelector, col_names, function(col_name){
-            downloadData(file_name,col_name,selectionChangedMap);
-            downloadData(file_name,col_name,selectionChangedScatterplot);
-    })
-  })
-}
 
 function descriptionFromColName(file_name, col_name){
   return data_index
@@ -34,12 +20,31 @@ function downloadData(file_name,col_name,callback){
   }
 }
 
-function setSelectBox(selector, data, cb){
+function onColumnSelected(file_name, col_name){
+    downloadData(file_name,col_name,updateMap);
+    downloadData(file_name,col_name,updateScatterplot);
+}
+
+function setupCombinedSelectBox(selector, initialValue){
+    var file_names = d3.set(data_index.map((d)=>d.PAGE_NAME)).values()
     var select = d3.select(selector)
-    var options = select.selectAll("option").data(data)
-    options.enter().append("option")
-    options.attr("value",(d)=>d).text((d)=>d)
-    select.on("change",function(){cb(d3.select(this).property("value"))})
+    var optgroups = select.selectAll("optgroup").data(file_names)
+    optgroups.enter().append("optgroup").attr("label",(d)=>d).each(function(file_name){
+      var col_names = data_index
+              .filter((d)=>d.PAGE_NAME == file_name)
+              .filter((d)=>d.DATA_TYPE != "Text")
+              .map((d)=>d.COLUMN_NAME)
+      d3.select(this).selectAll("option")
+        .data(col_names).enter()
+        .append("option")
+        .text((d)=>d)
+        .attr("value",(d)=>file_name+"/"+d)
+    })
+    select.property('value',initialValue)
+    select.on("change",function(){
+      var values = d3.select(this).property("value").split("/")
+      onColumnSelected(values[0],values[1])
+    })
 }
 
 function getFipsCodeFromRow(d){
@@ -49,6 +54,14 @@ function getFipsCodeFromRow(d){
 function getVarFromRow(d, colName){
     var col = +d[colName];
     return col > 0 ? col : 0;
+}
+
+function getCountyStateNames(data){
+  if(window.countyStateNames == undefined){
+    window.countyStateNames = d3.map();
+    data.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), d["CHSI_County_Name"] + ", " + d["CHSI_State_Abbr"]));
+  }
+  return countyStateNames
 }
 
 function setHover(d) {
@@ -197,13 +210,6 @@ function updateBarChart(fileName, parameter) {
         .style("fill", function (d) {return "blue"});
 }
 
-function getCountyStateNames(data){
-  if(window.countyStateNames == undefined){
-    window.countyStateNames = d3.map();
-    data.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), d["CHSI_County_Name"] + ", " + d["CHSI_State_Abbr"]));
-  }
-  return countyStateNames
-}
 
 function updateScatterplot(fileName, yParameter) {
     var desc = descriptionFromColName(fileName, yParameter)
@@ -288,9 +294,7 @@ function updateScatterplot(fileName, yParameter) {
     var radius = 2;
 
     circles.exit().remove();
-
-    circles.enter()
-        .append("circle");
+    circles.enter().append("circle");
 
     circles.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
@@ -311,8 +315,7 @@ function updateMap(fileName, colName){
 
     //Set map h2
     var desc = descriptionFromColName(fileName, colName)
-    var mapDesc = d3.select("#mapDesc");
-    mapDesc.text(desc);
+    d3.select("#mapDesc").text(desc);
 
     var dScale = d3.scale.linear() //lin or log
         .domain(d3.extent(varById.values()))
@@ -352,7 +355,6 @@ function updateSelection(){
 
 }
 
-
 function setup(error, data_index, us){
     window.data_index = data_index;
     window.us = us;
@@ -360,7 +362,7 @@ function setup(error, data_index, us){
     downloadData("SummaryMeasuresOfHealth", "Health_Status",  updateMap);
     downloadData("RiskFactorsAndAccessToCare", "Obesity", updateScatterplot);
     downloadData("SummaryMeasuresOfHealth", "Health_Status", updateBarChart);
-    selectDataset("#map-data-section", "#map-data-column", updateMap, updateScatterplot);
+    setupCombinedSelectBox("#data-selector","RiskFactorsAndAccessToCare/Obesity")
 }
 
 queue()
