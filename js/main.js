@@ -10,25 +10,25 @@ function descriptionFromColName(file_name, col_name){
 
 function isColPercentage(file_name, col_name){
     if (data_index.filter((d)=>d.PAGE_NAME == file_name).filter((d)=>d.COLUMN_NAME == col_name)[0].IS_PERCENT_DATA === "Y")
-    return true;
-else
-    return false;
+        return true;
+    else
+        return false;
 }
 
 function humanNameFromColName(file_name, col_name){
     return data_index
             .filter((d)=>d.PAGE_NAME == file_name)
-.filter((d)=>d.COLUMN_NAME == col_name)[0].HUMAN_COLNAME
+            .filter((d)=>d.COLUMN_NAME == col_name)[0].HUMAN_COLNAME
 }
 
 function downloadData(file_name,col_name,callback){
-    if(files.has(file_name)){
-        callback(file_name,col_name)
-    } else {
-        queue()
-            .defer(d3.csv, "data/chsi_dataset/"+file_name.toUpperCase()+".csv")
-            .await((error, d)=>{
-            files.set(file_name,d)
+  if(files.has(file_name)){
+    callback(file_name,col_name)
+  } else {
+    queue()
+      .defer(d3.csv, "data/chsi_dataset/"+file_name.toUpperCase()+".csv")
+      .await((error, d)=>{
+        files.set(file_name,d)
         callback(file_name,col_name)})
   }
 }
@@ -87,8 +87,8 @@ function setHover(d, colName, isPercent) {
 
         var countyStateName, xValue, yValue;
         if(d.type == "Feature"){ //Map hover
-            countyStateName = countyStateNames.get(d.id);
-            xValue = varById.get(d.id);
+          countyStateName = countyStateNames.get(d.id);
+          xValue = varById.get(d.id);
             if (isPercent) {
                 div.html(countyStateName + "<br />" + colName + ": " + xValue + "%");
             }
@@ -100,8 +100,8 @@ function setHover(d, colName, isPercent) {
                 div.html(countyStateName + "<br />" + colName + ": " + xValue);
             }
         } else { //scatterplot Hover
-            countyStateName = d.countyStateName;
-            xValue = d.xValue;
+          countyStateName = d.countyStateName;
+          xValue = d.xValue;
             yValue = d.yValue;
             if (isPercent) {
                 div.html(countyStateName + "<br />" + "'Fair' or 'Poor' health: " + xValue + "%"
@@ -404,6 +404,7 @@ function updateMap(fileName, colName){
       if(selectedCounties.length > 2){
         selectedCounties = selectedCounties.slice(-2)
       }
+      console.log(selectedCounties.map((i)=>countyStateNames.get(i)))
     })
 
     map.select(".states")
