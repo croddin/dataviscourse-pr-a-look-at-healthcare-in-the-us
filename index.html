@@ -9,12 +9,14 @@
     <script src="http://d3js.org/queue.v1.min.js"></script>
 </head>
 <body>
-    <label>Select parameter to update scatter plot and map:</label>
+<h1>A Look at Healthcare in the US: Which Factors Actually Make a Difference for Better Health Outcomes?</h1>
+    <label>Select parameters to update scatter plot and map:</label>
     <select id="map-data-section"></select>
     <select id="map-data-column"></select>
 
-    <br /><br />
+    <br />
 
+    <h2 id="scatterplotH2">Plot Showing Selected Parameter Against Self-reported Health Score</h2>
     <svg id="scatterplot" width="960" height="600">
         <g class="axis" id="xAxis"></g>
         <g id="xAxisLabel"></g>
@@ -27,7 +29,7 @@
 
     <br />
 
-    <h2 id="mapH2">Map depicting <span id="mapDesc"></span> by county</h2>
+    <h2 id="mapH2">Map Depicting <span id="mapDesc"></span> by County</h2>
     <svg id="map" width="960" height="600">
     <g class="counties"></g>
     <path class="states"></path>

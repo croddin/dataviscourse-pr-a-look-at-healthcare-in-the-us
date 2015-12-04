@@ -127,7 +127,7 @@ function updateBarChart(fileName, parameter) {
     //Color scale
     var colorScale = d3.scale.linear()
         .domain([0, max])
-        .range(["blue", "red"]);
+        .range(["#87CEFA", "#FF6347"]);
 
     //Setting up the axes
     var svgBounds = document.getElementById("ubarChart").getBoundingClientRect(),
@@ -281,7 +281,7 @@ function updateScatterplot(fileName, yParameter) {
     yAxisLabel.append("text")
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
-        .attr("y", 23)
+        .attr("y", 33)
         .attr("x",0 - (svgBounds.height / 2))
         .html(desc)
         .style("font-size", ".8em");
