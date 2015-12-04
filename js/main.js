@@ -337,7 +337,8 @@ function updateScatterplot(fileName, yParameter) {
         .data(xyData.filter(function (d) {return (d.xValue != 0 && d.yValue != 0)}));
     var radius = 2;
 
-    circles.enter().append("circle");
+    circles.enter().append("circle")
+      .attr("cy", function(d) {return yScale(0)})
 
     circles.on("mouseover", function (d) {setHover(d, humanNameFromColName(fileName,yParameter), isColPercentage(fileName, yParameter))})
         .on("mouseout", function (d) {clearHover()});
@@ -350,13 +351,18 @@ function updateScatterplot(fileName, yParameter) {
         .transition().duration(2000)
         .attr("opacity", 1);
 
-    circles.exit()
+    circles.exit().attr("opacity", 1)
+        .transition()
+        .duration(1000)
+        .attr("cy", function(d) {return yScale(0)})
         .remove();
 }
 
 function updateMap(fileName, colName){
     var data = files.get(fileName);
-    varById = d3.map();
+    var varById = d3.map();
+    window.currentFile = fileName
+    window.currentCol = colName
     data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,colName)));
 
     //County names
@@ -376,9 +382,13 @@ function updateMap(fileName, colName){
         .translate([map.attr("width") / 2, map.attr("height") / 2]);
     var path = d3.geo.path()
         .projection(projection);
-    var mapdata = topojson.feature(us, us.objects.counties).features
-    var counties = map.select(".counties").selectAll("path")
-            .data(mapdata, (d)=>d.id)
+    window.mapdata = topojson.feature(us, us.objects.counties).features
+    mapdata.forEach((d)=>{
+      d.cValue = varById.get(d.id)
+    })
+
+    window.counties = map.select(".counties").selectAll("path")
+        .data(mapdata, (d)=>d.id)
     counties.enter().append("path").attr("d", path)
     counties.style("fill", (d)=>cInterp(dScale(varById.get(d.id))));
 
@@ -386,13 +396,12 @@ function updateMap(fileName, colName){
         .on("mouseout", function (d) {clearHover()});
 
     counties.on("click", function(d){
-        if(!selectedCounties.includes(d.id)){
-            selectedCounties.push(d.id)
-        }
-        if(selectedCounties.length > 2){
-            selectedCounties = selectedCounties.slice(-2)
-        }
-        console.log(selectedCounties.map((i)=>countyStateNames.get(i)))
+      if(!selectedCounties.includes(d.id)){
+        selectedCounties.push(d.id)
+      }
+      if(selectedCounties.length > 2){
+        selectedCounties = selectedCounties.slice(-2)
+      }
     })
 
     map.select(".states")
