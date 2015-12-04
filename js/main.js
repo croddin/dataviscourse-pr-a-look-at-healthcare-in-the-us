@@ -3,9 +3,9 @@ var cInterp = d3.interpolateHsl(d3.rgb(247,251,255),d3.rgb(8,48,107));
 var selectedCounties = []
 
 function descriptionFromColName(file_name, col_name){
-    return data_index
-            .filter((d)=>d.PAGE_NAME == file_name)
-.filter((d)=>d.COLUMN_NAME == col_name)[0].LONG_DESCRIPTION
+  return data_index
+    .filter((d)=>d.PAGE_NAME == file_name)
+    .filter((d)=>d.COLUMN_NAME == col_name)[0].LONG_DESCRIPTION
 }
 
 function isColPercentage(file_name, col_name){
@@ -30,7 +30,7 @@ function downloadData(file_name,col_name,callback){
             .await((error, d)=>{
             files.set(file_name,d)
         callback(file_name,col_name)})
-}
+  }
 }
 
 function onColumnSelected(file_name, col_name){
@@ -43,25 +43,25 @@ function setupCombinedSelectBox(selector, initialValue){
     var select = d3.select(selector)
     var optgroups = select.selectAll("optgroup").data(file_names)
     optgroups.enter().append("optgroup").attr("label",(d)=>d).each(function(file_name){
-        var col_names = data_index
-                .filter((d)=>d.PAGE_NAME == file_name)
-        .filter((d)=>d.DATA_TYPE != "Text")
-        .map((d)=>d.COLUMN_NAME)
-        d3.select(this).selectAll("option")
-            .data(col_names).enter()
-            .append("option")
-            .text((d)=>d)
+      var col_names = data_index
+              .filter((d)=>d.PAGE_NAME == file_name)
+              .filter((d)=>d.DATA_TYPE != "Text")
+              .map((d)=>d.COLUMN_NAME)
+      d3.select(this).selectAll("option")
+        .data(col_names).enter()
+        .append("option")
+        .text((d)=>d)
         .attr("value",(d)=>file_name+"/"+d)
     })
     select.property('value',initialValue)
     select.on("change",function(){
-        var values = d3.select(this).property("value").split("/")
-        onColumnSelected(values[0],values[1])
+      var values = d3.select(this).property("value").split("/")
+      onColumnSelected(values[0],values[1])
     })
 }
 
 function getFipsCodeFromRow(d){
-    return +(d.State_FIPS_Code + d.County_FIPS_Code)
+  return +(d.State_FIPS_Code + d.County_FIPS_Code)
 }
 
 function getVarFromRow(d, colName){
@@ -70,15 +70,14 @@ function getVarFromRow(d, colName){
 }
 
 function getCountyStateNames(data){
-    if(window.countyStateNames == undefined){
-        window.countyStateNames = d3.map();
-        data.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), d["CHSI_County_Name"] + ", " + d["CHSI_State_Abbr"]));
-    }
-    return countyStateNames
+  if(window.countyStateNames == undefined){
+    window.countyStateNames = d3.map();
+    data.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), d["CHSI_County_Name"] + ", " + d["CHSI_State_Abbr"]));
+  }
+  return countyStateNames
 }
 
-//Comma formatting from http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
-function setHover(d, colName, isPercent) {
+function setHover(d) {
     var div = d3.select("#tooltip");
     console.log("d",d)
     if (d != null) {
@@ -272,12 +271,13 @@ function updateScatterplot(fileName, yParameter) {
 
     var xyData = [];
     xVarById.keys().forEach((i)=>
-    xyData.push({
-        xValue: xVarById.get(i),
-        yValue: yVarById.get(i),
-        countyStateName: countyStateNames.get(i)
-    })
-)
+      xyData.push({
+          xValue: xVarById.get(i),
+          yValue: yVarById.get(i),
+          countyStateName: countyStateNames.get(i),
+          id:i
+      })
+    )
 
     var svgBounds = document.getElementById("scatterplot").getBoundingClientRect(),
         xAxisSize = 50,
@@ -339,6 +339,7 @@ function updateScatterplot(fileName, yParameter) {
 
     circles.enter().append("circle")
       .attr("cy", function(d) {return yScale(0)})
+      .attr("cx", function(d) {return xScale(0)})
 
     circles.on("mouseover", function (d) {setHover(d, humanNameFromColName(fileName,yParameter), isColPercentage(fileName, yParameter))})
         .on("mouseout", function (d) {clearHover()});
@@ -355,6 +356,7 @@ function updateScatterplot(fileName, yParameter) {
         .transition()
         .duration(1000)
         .attr("cy", function(d) {return yScale(0)})
+        .attr("cx", function(d) {return xScale(0)})
         .remove();
 }
 
@@ -406,7 +408,7 @@ function updateMap(fileName, colName){
 
     map.select(".states")
         .datum(topojson.mesh(us, us.objects.states,(a, b)=> a !== b))
-.attr("d", path);
+        .attr("d", path);
 }
 
 function updateSelection(){
@@ -424,7 +426,7 @@ function setup(error, data_index, us, summary){
 }
 
 queue()
-    .defer(d3.csv, "data/chsi_dataset/DATAELEMENTDESCRIPTION.csv")
-    .defer(d3.json, "data/us.json")
-    .defer(d3.csv, "data/chsi_dataset/"+"SummaryMeasuresOfHealth".toUpperCase()+".csv")
-    .await(setup);
+  .defer(d3.csv, "data/chsi_dataset/DATAELEMENTDESCRIPTION.csv")
+  .defer(d3.json, "data/us.json")
+  .defer(d3.csv, "data/chsi_dataset/"+"SummaryMeasuresOfHealth".toUpperCase()+".csv")
+  .await(setup);
