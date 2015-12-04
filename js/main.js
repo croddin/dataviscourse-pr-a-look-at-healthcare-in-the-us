@@ -10,25 +10,25 @@ function descriptionFromColName(file_name, col_name){
 
 function isColPercentage(file_name, col_name){
     if (data_index.filter((d)=>d.PAGE_NAME == file_name).filter((d)=>d.COLUMN_NAME == col_name)[0].IS_PERCENT_DATA === "Y")
-        return true;
-    else
-        return false;
+    return true;
+else
+    return false;
 }
 
 function humanNameFromColName(file_name, col_name){
     return data_index
             .filter((d)=>d.PAGE_NAME == file_name)
-            .filter((d)=>d.COLUMN_NAME == col_name)[0].HUMAN_COLNAME
+.filter((d)=>d.COLUMN_NAME == col_name)[0].HUMAN_COLNAME
 }
 
 function downloadData(file_name,col_name,callback){
-  if(files.has(file_name)){
-    callback(file_name,col_name)
-  } else {
-    queue()
-      .defer(d3.csv, "data/chsi_dataset/"+file_name.toUpperCase()+".csv")
-      .await((error, d)=>{
-        files.set(file_name,d)
+    if(files.has(file_name)){
+        callback(file_name,col_name)
+    } else {
+        queue()
+            .defer(d3.csv, "data/chsi_dataset/"+file_name.toUpperCase()+".csv")
+            .await((error, d)=>{
+            files.set(file_name,d)
         callback(file_name,col_name)})
   }
 }
@@ -77,7 +77,6 @@ function getCountyStateNames(data){
   return countyStateNames
 }
 
-//Comma formatting from http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
 function setHover(d, colName, isPercent) {
     var div = d3.select("#tooltip");
     console.log("d",d)
@@ -88,8 +87,8 @@ function setHover(d, colName, isPercent) {
 
         var countyStateName, xValue, yValue;
         if(d.type == "Feature"){ //Map hover
-          countyStateName = countyStateNames.get(d.id);
-          xValue = varById.get(d.id);
+            countyStateName = countyStateNames.get(d.id);
+            xValue = varById.get(d.id);
             if (isPercent) {
                 div.html(countyStateName + "<br />" + colName + ": " + xValue + "%");
             }
@@ -101,8 +100,8 @@ function setHover(d, colName, isPercent) {
                 div.html(countyStateName + "<br />" + colName + ": " + xValue);
             }
         } else { //scatterplot Hover
-          countyStateName = d.countyStateName;
-          xValue = d.xValue;
+            countyStateName = d.countyStateName;
+            xValue = d.xValue;
             yValue = d.yValue;
             if (isPercent) {
                 div.html(countyStateName + "<br />" + "'Fair' or 'Poor' health: " + xValue + "%"
@@ -275,7 +274,8 @@ function updateScatterplot(fileName, yParameter) {
       xyData.push({
           xValue: xVarById.get(i),
           yValue: yVarById.get(i),
-          countyStateName: countyStateNames.get(i)
+          countyStateName: countyStateNames.get(i),
+          id:i
       })
     )
 
@@ -337,7 +337,9 @@ function updateScatterplot(fileName, yParameter) {
         .data(xyData.filter(function (d) {return (d.xValue != 0 && d.yValue != 0)}));
     var radius = 2;
 
-    circles.enter().append("circle");
+    circles.enter().append("circle")
+      .attr("cy", function(d) {return yScale(0)})
+      .attr("cx", function(d) {return xScale(0)})
 
     circles.on("mouseover", function (d) {setHover(d, humanNameFromColName(fileName,yParameter), isColPercentage(fileName, yParameter))})
         .on("mouseout", function (d) {clearHover()});
@@ -350,13 +352,19 @@ function updateScatterplot(fileName, yParameter) {
         .transition().duration(2000)
         .attr("opacity", 1);
 
-    circles.exit()
+    circles.exit().attr("opacity", 1)
+        .transition()
+        .duration(1000)
+        .attr("cy", function(d) {return yScale(0)})
+        .attr("cx", function(d) {return xScale(0)})
         .remove();
 }
 
 function updateMap(fileName, colName){
     var data = files.get(fileName);
-    varById = d3.map();
+    var varById = d3.map();
+    window.currentFile = fileName
+    window.currentCol = colName
     data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,colName)));
 
     //County names
@@ -376,8 +384,12 @@ function updateMap(fileName, colName){
         .translate([map.attr("width") / 2, map.attr("height") / 2]);
     var path = d3.geo.path()
         .projection(projection);
-    var mapdata = topojson.feature(us, us.objects.counties).features
-    var counties = map.select(".counties").selectAll("path")
+    window.mapdata = topojson.feature(us, us.objects.counties).features
+    mapdata.forEach((d)=>{
+      d.cValue = varById.get(d.id)
+    })
+
+    window.counties = map.select(".counties").selectAll("path")
         .data(mapdata, (d)=>d.id)
     counties.enter().append("path").attr("d", path)
     counties.style("fill", (d)=>cInterp(dScale(varById.get(d.id))));
@@ -392,7 +404,6 @@ function updateMap(fileName, colName){
       if(selectedCounties.length > 2){
         selectedCounties = selectedCounties.slice(-2)
       }
-      console.log(selectedCounties.map((i)=>countyStateNames.get(i)))
     })
 
     map.select(".states")
