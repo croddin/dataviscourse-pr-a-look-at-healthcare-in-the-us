@@ -77,7 +77,9 @@ function getCountyStateNames(data){
   return countyStateNames
 }
 
-function setHover(d, colName, isPercent) {
+function setHover(d) {
+    var isPercent = isColPercentage(currentFile, currentCol);
+    var colName = humanNameFromColName(currentFile,currentCol);
     var div = d3.select("#tooltip");
     console.log("d",d)
     if (d != null) {
@@ -87,17 +89,17 @@ function setHover(d, colName, isPercent) {
 
         var countyStateName, xValue, yValue;
         if(d.type == "Feature"){ //Map hover
-          countyStateName = countyStateNames.get(d.id);
-          xValue = varById.get(d.id);
+            countyStateName = countyStateNames.get(d.id);
+            var xText = d.cValue == 0 ? "Not reported" : d.cValue;
             if (isPercent) {
-                div.html(countyStateName + "<br />" + colName + ": " + xValue + "%");
+                div.html(countyStateName + "<br />" + colName + ": "+ xText + "%");
             }
             else {
-                var parts = xValue.toString().split(".");
+                var parts = xText.toString().split(".");
                 parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                xValue = parts.join(".");
+                xText = parts.join(".");
 
-                div.html(countyStateName + "<br />" + colName + ": " + xValue);
+                div.html(countyStateName + "<br />" + colName + ": " + xText);
             }
         } else { //scatterplot Hover
           countyStateName = d.countyStateName;
