@@ -360,11 +360,11 @@ function updateSelection(){
 
 }
 
-function setup(error, data_index, us){
+function setup(error, data_index, us, summary){
     window.data_index = data_index;
     window.us = us;
-
-    downloadData("SummaryMeasuresOfHealth", "Health_Status",  updateMap);
+    files.set("SummaryMeasuresOfHealth",summary)
+    downloadData("RiskFactorsAndAccessToCare", "Obesity",  updateMap);
     downloadData("RiskFactorsAndAccessToCare", "Obesity", updateScatterplot);
     downloadData("SummaryMeasuresOfHealth", "Health_Status", updateBarChart);
     setupCombinedSelectBox("#data-selector","RiskFactorsAndAccessToCare/Obesity")
@@ -373,4 +373,5 @@ function setup(error, data_index, us){
 queue()
   .defer(d3.csv, "data/chsi_dataset/DATAELEMENTDESCRIPTION.csv")
   .defer(d3.json, "data/us.json")
+  .defer(d3.csv, "data/chsi_dataset/"+"SummaryMeasuresOfHealth".toUpperCase()+".csv")
   .await(setup);
