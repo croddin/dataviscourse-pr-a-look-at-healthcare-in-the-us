@@ -77,17 +77,81 @@ function clearHover() {
 }
 
 function updateBarChart(fileName, parameter, desc) {
+    //Getting the appropriate data.
+    var valuesArray = [];
+    nameMap = d3.map();
+
     data = files.get(fileName);
-    varById = d3.map();
-    data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,parameter)));
+    data.forEach(function (d) {
+        valuesArray.push([getFipsCodeFromRow(d), getVarFromRow(d,parameter)]);
+        nameMap.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name") + ", " + getCountyStateNames(d, "CHSI_State_Abbr"));
+        });
 
-    var highestArray = [];
+    valuesArray.sort(function (a, b) {
+        if (a[1] == b[1]) {
+            return 0;
+        }
+        else {
+            return (a[1] > b[1]) ? -1 : 1;
+        }
+    });
 
-    for (var i = 0; i < 19; i++) {
-        highestArray[i];
+    var highestValues = [];
+
+    for (var i = 0; i < 20; i++) {
+        highestValues.push(valuesArray[i]);
     }
 
-    console.log(highestArray);
+    var max = highestValues[0][1];
+
+    highestValues.reverse();
+
+    var min = highestValues[0][1];
+
+    //Setting up the axes
+    var svgBounds = document.getElementById("ubarChart").getBoundingClientRect(),
+        xAxisSize = 50,
+        yAxisSize = 120,
+        padding = 30;
+
+    var xScale = d3.scale.linear().range([0, svgBounds.width - yAxisSize - 5]).domain([0, max]);
+    var yScale = d3.scale.ordinal().rangeBands([svgBounds.height - xAxisSize, 0], 0.1).domain(d3.range(0, 20));
+
+    var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+    var yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+    d3.select("#xuAxisBar")
+        .attr("transform", "translate(" + yAxisSize + ", " + (svgBounds.height - xAxisSize) + ")")
+        .call(xAxis);
+
+    var yBar = d3.select("#yuAxisBar")
+        .attr("transform", "translate(" + yAxisSize + ", 0)")
+        .call(yAxis);
+
+    yBar.selectAll("text")
+        .style("text-anchor", "end")
+        .text(function (d, i) {
+
+            return nameMap.get(highestValues[i][0]);
+        });
+
+    //Drawing the bars
+    var barsGroup = d3.select("#ubars");
+
+    var bars = barsGroup.selectAll("rect")
+        .data(highestValues);
+
+    bars.exit().remove();
+
+    bars.enter()
+        .append("rect");
+
+    bars.attr("height", yScale.rangeBand())
+        .attr("y", function(d, i) {return yScale(i)})
+        .attr("width", function(d) {return xScale(d[1])})
+        .attr("x", yAxisSize)
+        .style("fill", function (d) {return "blue"});
+
 }
 
 function updateScatterplot(fileName, yParameter, desc) {
@@ -128,7 +192,6 @@ function updateScatterplot(fileName, yParameter, desc) {
         .domain(d3.extent(yVarById.values()))
         .range([svgBounds.height - xAxisSize, padding]);
 
-    var xGroup = d3.select("#xAxis");
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient("bottom");
@@ -148,7 +211,6 @@ function updateScatterplot(fileName, yParameter, desc) {
         .html("Health status: The percentage of adults who report 'Fair' or 'Poor' overall health")
         .style("font-size", ".8em");
 
-    var yGroup = d3.select("#yAxis");
     var yAxis = d3.svg.axis()
         .scale(yScale)
         .orient("left");

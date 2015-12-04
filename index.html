@@ -27,7 +27,7 @@
 
     <br />
 
-    <h2>Map depicting <span id="mapDesc"></span> by county</h2>
+    <h2 id="mapH2">Map depicting <span id="mapDesc"></span> by county</h2>
     <svg id="map" width="960" height="600">
     <g class="counties"></g>
     <path class="states"></path>
@@ -36,9 +36,23 @@
     <div>The more saturated a county appears, the higher its percentage or total number.
     <br/>Counties that appear white have no recorded data for the requested metric.</div>
 
-    <svg id="barChart" width="400" height="600">
-        <g id="bars"></g>
+    <div style="float: left">
+    <h2 id="unhealthyBarChartH2">Unhealthiest Counties in America, According to Self-reported Health Score</h2>
+    <svg id="ubarChart" width="500" height="600">
+        <g class="axis" id="xuAxisBar"></g>
+        <g class="axis" id="yuAxisBar"></g>
+        <g id="ubars"></g>
     </svg>
+    </div>
+
+    <div style="float: left">
+    <h2 id="healthyBarChartH2">Healthiest Counties in America, According to Self-reported Health Score</h2>
+    <svg id="hbarChart" width="500" height="600">
+        <g class="axis" id="xhAxisBar"></g>
+        <g class="axis" id="yhAxisBar"></g>
+        <g id="hbars"></g>
+    </svg>
+    </div>
 
   <script src="js/main.js"></script>
 </body>
