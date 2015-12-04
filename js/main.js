@@ -9,10 +9,6 @@ function selectDataset(fileSelector, colSelector, selectionChangedMap, selection
                 .filter((d)=>d.PAGE_NAME == file_name)
                 .filter((d)=>d.DATA_TYPE != "Text")
                 .map((d)=>d.COLUMN_NAME)
-        var descriptions = data_index
-                .filter((d)=>d.PAGE_NAME == file_name)
-                .filter((d)=>d.DATA_TYPE != "Text")
-                .map((d)=>d.LONG_DESCRIPTION)
         setSelectBox(colSelector, col_names, function(col_name){
             downloadData(file_name,col_name,selectionChangedMap);
             downloadData(file_name,col_name,selectionChangedScatterplot);
@@ -20,15 +16,21 @@ function selectDataset(fileSelector, colSelector, selectionChangedMap, selection
   })
 }
 
-function downloadData(file_name,col_name,desc,callback){
+function descriptionFromColName(file_name, col_name){
+  return data_index
+    .filter((d)=>d.PAGE_NAME == file_name)
+    .filter((d)=>d.COLUMN_NAME == col_name)[0].LONG_DESCRIPTION
+}
+
+function downloadData(file_name,col_name,callback){
   if(files.has(file_name)){
-    callback(file_name,col_name,desc)
+    callback(file_name,col_name)
   } else {
     queue()
       .defer(d3.csv, "data/chsi_dataset/"+file_name.toUpperCase()+".csv")
       .await((error, d)=>{
         files.set(file_name,d)
-        callback(file_name,col_name,desc)})
+        callback(file_name,col_name)})
   }
 }
 
@@ -55,13 +57,22 @@ function getCountyStateNames (d, colName) {
 
 function setHover(d) {
     var div = d3.select("#tooltip");
-
+    console.log("d",d)
     if (d != null) {
         div.transition()
             .duration(200)
             .style("opacity", .9);
 
-        div.html(d.countyStateName + "<br />" + "'Fair' or 'Poor' health: " + d.xValue + "%")
+        var countyStateName, xValue
+        if(d.type == "Feature"){ //Map hover
+          countyStateName = countyStateNames.get(d.id)
+          xValue = varById.get(d.id)
+        } else { //scatterplot Hover
+          countyStateName = d.countyStateName
+          xValue = d.xValue
+        }
+
+        div.html(countyStateName + "<br />" + "'Fair' or 'Poor' health: " + xValue + "%")
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY - 30) + "px");
     }
@@ -76,7 +87,8 @@ function clearHover() {
     setHover(null);
 }
 
-function updateBarChart(fileName, parameter, desc) {
+function updateBarChart(fileName, parameter) {
+    var desc = descriptionFromColName(fileName, parameter)
     //Getting the appropriate data.
     var valuesArray = [];
     nameMap = d3.map();
@@ -154,7 +166,8 @@ function updateBarChart(fileName, parameter, desc) {
 
 }
 
-function updateScatterplot(fileName, yParameter, desc) {
+function updateScatterplot(fileName, yParameter) {
+    var desc = descriptionFromColName(fileName, yParameter)
     //x Axis doesn't change - self-reported health status
     xData = files.get("SummaryMeasuresOfHealth");
     xVarById = d3.map();
@@ -251,7 +264,8 @@ function updateScatterplot(fileName, yParameter, desc) {
         .style("fill", function (d) {return "blue"});
 }
 
-function updateMap(fileName, colName, desc){
+function updateMap(fileName, colName){
+    var desc = descriptionFromColName(fileName, colName)
     data = files.get(fileName);
     varById = d3.map();
     data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,colName)));
@@ -277,11 +291,11 @@ function updateMap(fileName, colName, desc){
         .projection(projection);
 
     var counties = map.select(".counties").selectAll("path")
-        .data(topojson.feature(us, us.objects.counties).features)
+        .data(topojson.feature(us, us.objects.counties).features, (d)=>d.id)
     counties.enter().append("path").attr("d", path)
     counties.style("fill", (d)=>cInterp(dScale(varById.get(d.id))));
 
-    counties.on("mouseover", function (d) {setHover(countyStateNames.get(d.id))})
+    counties.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
     map.select(".states")
@@ -293,10 +307,9 @@ function setup(error, data_index, us){
     window.data_index = data_index;
     window.us = us;
 
-    downloadData("SummaryMeasuresOfHealth", "Health_Status", "Health status: The percentage of adults who report 'Fair' or 'Poor' overall health", updateMap);
-    downloadData("RiskFactorsAndAccessToCare", "Obesity", "Percentage of adults at classified as obese according to BMI", updateScatterplot);
-    downloadData("SummaryMeasuresOfHealth", "Health_Status", "Health status: The percentage of adults who report 'Fair' or 'Poor' overall health", updateBarChart);
-
+    downloadData("SummaryMeasuresOfHealth", "Health_Status",  updateMap);
+    downloadData("RiskFactorsAndAccessToCare", "Obesity", updateScatterplot);
+    downloadData("SummaryMeasuresOfHealth", "Health_Status", updateBarChart);
     selectDataset("#map-data-section", "#map-data-column", updateMap, updateScatterplot);
 }
 
