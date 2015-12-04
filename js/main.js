@@ -124,6 +124,11 @@ function updateBarChart(fileName, parameter) {
 
     highestValues.reverse();
 
+    //Color scale
+    var colorScale = d3.scale.linear()
+        .domain([0, max])
+        .range(["blue", "red"]);
+
     //Setting up the axes
     var svgBounds = document.getElementById("ubarChart").getBoundingClientRect(),
         xAxisSize = 50,
@@ -188,13 +193,13 @@ function updateBarChart(fileName, parameter) {
         .attr("y", function(d, i) {return yScale(i)})
         .attr("width", function(d) {return xScale(d[1])})
         .attr("x", yAxisSize)
-        .style("fill", function (d) {return "blue"});
+        .style("fill", function (d) {return colorScale(d[1])});
 
     hbars.attr("height", yScale.rangeBand())
         .attr("y", function(d, i) {return yScale(i)})
         .attr("width", function(d) {return xScale(d[1])})
         .attr("x", yAxisSize)
-        .style("fill", function (d) {return "blue"});
+        .style("fill", function (d) {return colorScale(d[1])});
 }
 
 function getCountyStateNames(data){

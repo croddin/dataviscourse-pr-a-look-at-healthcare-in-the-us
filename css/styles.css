@@ -37,3 +37,11 @@ h2, div {
   position: relative;
   left: 12%;
 }
+
+.barChart {
+  float: left;
+}
+
+#barChartExplanation {
+  clear: both;
+}

@@ -36,7 +36,7 @@
     <div>The more saturated a county appears, the higher its percentage or total number.
     <br/>Counties that appear white have no recorded data for the requested metric.</div>
 
-    <div style="float: left">
+    <div class="barChart">
     <h2 id="unhealthyBarChartH2">20 Unhealthiest Counties in America, According to Self-reported Health Score</h2>
     <svg id="ubarChart" width="500" height="600">
         <g class="axis" id="xuAxisBar"></g>
@@ -45,7 +45,7 @@
     </svg>
     </div>
 
-    <div style="float: left">
+    <div class="barChart">
     <h2 id="healthyBarChartH2">20 Healthiest Counties in America, According to Self-reported Health Score</h2>
     <svg id="hbarChart" width="500" height="600">
         <g class="axis" id="xhAxisBar"></g>
@@ -53,6 +53,8 @@
         <g id="hbars"></g>
     </svg>
     </div>
+    <div id="barChartExplanation">Health status indicates the percentage of adults who report 'Fair' or 'Poor' overall health.
+    <br />Lower scores, then, are indicative of better health.</div>
 
   <script src="js/main.js"></script>
 </body>
