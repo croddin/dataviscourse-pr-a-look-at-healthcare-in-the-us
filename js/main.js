@@ -138,9 +138,9 @@ function updateBarChart(fileName, parameter) {
     highestValues.reverse();
 
     //Color scale
-    var colorScale = d3.scale.linear()
+    colorScale = d3.scale.linear()
         .domain([0, max])
-        .range(["#87CEFA", "#FF6347"]);
+        .range(["blue", "red"]);
 
     //Setting up the axes
     var svgBounds = document.getElementById("ubarChart").getBoundingClientRect(),
@@ -206,13 +206,15 @@ function updateBarChart(fileName, parameter) {
         .attr("y", function(d, i) {return yScale(i)})
         .attr("width", function(d) {return xScale(d[1])})
         .attr("x", yAxisSize)
-        .style("fill", function (d) {return colorScale(d[1])});
+        .style("fill", function (d) {return colorScale(d[1])})
+        .attr("opacity", ".9");
 
     hbars.attr("height", yScale.rangeBand())
         .attr("y", function(d, i) {return yScale(i)})
         .attr("width", function(d) {return xScale(d[1])})
         .attr("x", yAxisSize)
-        .style("fill", function (d) {return colorScale(d[1])});
+        .style("fill", function (d) {return colorScale(d[1])})
+        .attr("opacity", ".9");
 }
 
 
@@ -298,7 +300,6 @@ function updateScatterplot(fileName, yParameter) {
         .data(xyData.filter(function (d) {return (d.xValue != 0 && d.yValue != 0)}));
     var radius = 2;
 
-    circles.exit().remove();
     circles.enter().append("circle");
 
     circles.on("mouseover", function (d) {setHover(d)})
@@ -307,7 +308,16 @@ function updateScatterplot(fileName, yParameter) {
     circles.attr("cy", function(d) {return yScale(d.yValue)})
         .attr("cx", function(d) {return xScale(d.xValue)})
         .attr("r", radius)
-        .style("fill", function (d) {return "blue"});
+        .style("fill", function (d) {return colorScale(d.xValue)})
+        .attr("opacity", 0)
+        .transition().duration(2000)
+        .attr("opacity", 1);
+
+    circles.exit().attr("opacity", 1)
+        .transition()
+        .duration(3000)
+        .attr("opacity", 0)
+        .remove();
 }
 
 function updateMap(fileName, colName){

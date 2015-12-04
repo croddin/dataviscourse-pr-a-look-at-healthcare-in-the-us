@@ -10,7 +10,7 @@
 </head>
 <body>
 <h1>A Look at Healthcare in the US: Which Factors Actually Make a Difference for Better Health Outcomes?</h1>
-    <label>Select parameters to update scatter plot and map:</label>
+    <label>Select parameter to update scatter plot and map:</label>
     <select id="data-selector"></select>
 
     <br />
@@ -23,6 +23,7 @@
         <g id="yAxisLabel"></g>
         <g id="circles"></g>
     </svg>
+    <div>Circles that appear as blue are counties that report better health, while those that appear as red represent counties that report a worse overall health status.</div>
 
     <div id="tooltip"></div>
 
@@ -34,28 +35,26 @@
     <path class="states"></path>
     </svg>
     <br />
-    <div>The more saturated a county appears, the higher its percentage or total number.
-    <br/>Counties that appear white have no recorded data for the requested metric.</div>
+    <div>The more saturated a county appears, the higher its percentage or total number. Counties that appear white have no recorded data for the requested metric.</div>
 
-    <div class="barChart">
+    <span class="barChart">
     <h2 id="unhealthyBarChartH2">20 Unhealthiest Counties in America, According to Self-reported Health Score</h2>
     <svg id="ubarChart" width="500" height="600">
         <g class="axis" id="xuAxisBar"></g>
         <g class="axis" id="yuAxisBar"></g>
         <g id="ubars"></g>
     </svg>
-    </div>
+    </span>
 
-    <div class="barChart">
+    <span class="barChart">
     <h2 id="healthyBarChartH2">20 Healthiest Counties in America, According to Self-reported Health Score</h2>
     <svg id="hbarChart" width="500" height="600">
         <g class="axis" id="xhAxisBar"></g>
         <g class="axis" id="yhAxisBar"></g>
         <g id="hbars"></g>
     </svg>
-    </div>
-    <div id="barChartExplanation">Health status indicates the percentage of adults who report 'Fair' or 'Poor' overall health.
-    <br />Lower scores, then, are indicative of better health.</div>
+    </span>
+    <div id="barChartExplanation">Health status indicates the percentage of adults who report 'Fair' or 'Poor' overall health. Lower scores, then, are indicative of better health.</div>
 
   <script src="js/main.js"></script>
 </body>

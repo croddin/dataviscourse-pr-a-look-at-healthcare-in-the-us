@@ -7,6 +7,12 @@
   fill: none;
   stroke: #000;
   stroke-linejoin: round;
+  position: relative;
+}
+
+div, label {
+  margin-bottom: 1em;
+  width: 57%;
 }
 
 div#tooltip {
@@ -19,6 +25,7 @@ div#tooltip {
   border-radius: 8px;
   pointer-events: none;
   opacity: 0;
+  width: auto;
 }
 
 .axis path,
@@ -28,29 +35,26 @@ div#tooltip {
   shape-rendering: crispEdges;
 }
 
-div, label {
-  margin-bottom: 1em;
-}
-
 h1 {
   font-family: sans-serif;
   font-size: 1.25em;
+  position: relative;
+  left: 7%;
 }
 
 h2 {
   font-family: sans-serif;
-  font-size: 1em;
+  font-size: .95em;
 }
-
 
 .axis text, div, label, g {
   font-family: sans-serif;
   font-size: .9em;
 }
 
-h1, h2, div, label, select {
+h2, div, label, select {
   position: relative;
-  left: 8%;
+  left: 10%;
 }
 
 .barChart {
