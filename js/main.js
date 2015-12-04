@@ -137,6 +137,11 @@ function updateBarChart(fileName, parameter) {
 
     highestValues.reverse();
 
+    //Color scale
+    var colorScale = d3.scale.linear()
+        .domain([0, max])
+        .range(["#87CEFA", "#FF6347"]);
+
     //Setting up the axes
     var svgBounds = document.getElementById("ubarChart").getBoundingClientRect(),
         xAxisSize = 50,
@@ -201,13 +206,13 @@ function updateBarChart(fileName, parameter) {
         .attr("y", function(d, i) {return yScale(i)})
         .attr("width", function(d) {return xScale(d[1])})
         .attr("x", yAxisSize)
-        .style("fill", function (d) {return "blue"});
+        .style("fill", function (d) {return colorScale(d[1])});
 
     hbars.attr("height", yScale.rangeBand())
         .attr("y", function(d, i) {return yScale(i)})
         .attr("width", function(d) {return xScale(d[1])})
         .attr("x", yAxisSize)
-        .style("fill", function (d) {return "blue"});
+        .style("fill", function (d) {return colorScale(d[1])});
 }
 
 
@@ -282,7 +287,7 @@ function updateScatterplot(fileName, yParameter) {
     yAxisLabel.append("text")
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
-        .attr("y", 23)
+        .attr("y", 33)
         .attr("x",0 - (svgBounds.height / 2))
         .html(desc)
         .style("font-size", ".8em");
