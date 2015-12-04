@@ -238,7 +238,8 @@ function updateScatterplot(fileName, yParameter) {
       xyData.push({
           xValue: xVarById.get(i),
           yValue: yVarById.get(i),
-          countyStateName: countyStateNames.get(i)
+          countyStateName: countyStateNames.get(i),
+          id:i
       })
     )
 
@@ -297,26 +298,28 @@ function updateScatterplot(fileName, yParameter) {
     //Setting up the circles
     var circlesGroup = d3.select("#circles");
     var circles = circlesGroup.selectAll("circle")
-        .data(xyData.filter(function (d) {return (d.xValue != 0 && d.yValue != 0)}));
+        .data(xyData.filter(function (d) {return (d.xValue != 0 && d.yValue != 0)}), (d)=>d.id);
     var radius = 2;
 
-    circles.enter().append("circle");
+    circles.enter().append("circle")
+      .attr("cy", function(d) {return yScale(0)})
+      .attr("cx", function(d) {return xScale(0)})
 
     circles.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
-    circles.attr("cy", function(d) {return yScale(d.yValue)})
-        .attr("cx", function(d) {return xScale(d.xValue)})
+    circles
         .attr("r", radius)
         .style("fill", function (d) {return colorScale(d.xValue)})
-        .attr("opacity", 0)
-        .transition().duration(2000)
-        .attr("opacity", 1);
+        .transition().duration(1000)
+        .attr("cy", function(d) {return yScale(d.yValue)})
+        .attr("cx", function(d) {return xScale(d.xValue)})
 
     circles.exit().attr("opacity", 1)
         .transition()
-        .duration(3000)
-        .attr("opacity", 0)
+        .duration(1000)
+        .attr("cy", function(d) {return yScale(0)})
+        .attr("cx", function(d) {return xScale(0)})
         .remove();
 }
 
