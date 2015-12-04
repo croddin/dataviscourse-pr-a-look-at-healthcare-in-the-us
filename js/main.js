@@ -1,6 +1,6 @@
 var files = d3.map();
 var cInterp = d3.interpolateHsl(d3.rgb(247,251,255),d3.rgb(8,48,107));
-
+var selectedCounties = []
 //will call selectionChanged(filename, columnname)
 function selectDataset(fileSelector, colSelector, selectionChangedMap, selectionChangedScatterplot){
     var file_names = d3.set(data_index.map((d)=>d.PAGE_NAME)).values()
@@ -51,10 +51,6 @@ function getVarFromRow(d, colName){
     return col > 0 ? col : 0;
 }
 
-function getCountyStateNames (d, colName) {
-    return d[colName];
-}
-
 function setHover(d) {
     var div = d3.select("#tooltip");
     console.log("d",d)
@@ -94,13 +90,12 @@ function updateBarChart(fileName, parameter) {
     var highestValues = [];
     var lowestValues = [];
 
-    nameMap = d3.map();
-
     data = files.get(fileName);
+    var nameMap = getCountyStateNames(data)
+
     data.forEach(function (d) {
         valuesArray.push([getFipsCodeFromRow(d), getVarFromRow(d,parameter)]);
-        nameMap.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name") + ", " + getCountyStateNames(d, "CHSI_State_Abbr"));
-        });
+    });
 
     valuesArray.sort(function (a, b) {
         if (a[1] == b[1]) {
@@ -202,6 +197,14 @@ function updateBarChart(fileName, parameter) {
         .style("fill", function (d) {return "blue"});
 }
 
+function getCountyStateNames(data){
+  if(window.countyStateNames == undefined){
+    window.countyStateNames = d3.map();
+    data.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), d["CHSI_County_Name"] + ", " + d["CHSI_State_Abbr"]));
+  }
+  return countyStateNames
+}
+
 function updateScatterplot(fileName, yParameter) {
     var desc = descriptionFromColName(fileName, yParameter)
     //x Axis doesn't change - self-reported health status
@@ -215,11 +218,9 @@ function updateScatterplot(fileName, yParameter) {
     yData.forEach(d=>yVarById.set(getFipsCodeFromRow(d), getVarFromRow(d,yParameter)));
 
     //County and state names
-    countyStateNames = d3.map();
-    xData.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name") + ", " + getCountyStateNames(d, "CHSI_State_Abbr")));
+    var countyStateNames = getCountyStateNames(xData)
 
     var xyData = [];
-
     xVarById.keys().forEach((i)=>
       xyData.push({
           xValue: xVarById.get(i),
@@ -301,18 +302,16 @@ function updateScatterplot(fileName, yParameter) {
 }
 
 function updateMap(fileName, colName){
-    var desc = descriptionFromColName(fileName, colName)
-    data = files.get(fileName);
+    var data = files.get(fileName);
     varById = d3.map();
     data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,colName)));
 
     //County names
-    countyStateNames = d3.map();
-    data.forEach(d=>countyStateNames.set(getFipsCodeFromRow(d), getCountyStateNames(d, "CHSI_County_Name") + ", " + getCountyStateNames(d, "CHSI_State_Abbr")));
+    var countyStateNames = getCountyStateNames(data)
 
     //Set map h2
+    var desc = descriptionFromColName(fileName, colName)
     var mapDesc = d3.select("#mapDesc");
-
     mapDesc.text(desc);
 
     var dScale = d3.scale.linear() //lin or log
@@ -325,19 +324,34 @@ function updateMap(fileName, colName){
         .translate([map.attr("width") / 2, map.attr("height") / 2]);
     var path = d3.geo.path()
         .projection(projection);
-
+    var mapdata = topojson.feature(us, us.objects.counties).features
     var counties = map.select(".counties").selectAll("path")
-        .data(topojson.feature(us, us.objects.counties).features, (d)=>d.id)
+        .data(mapdata, (d)=>d.id)
     counties.enter().append("path").attr("d", path)
     counties.style("fill", (d)=>cInterp(dScale(varById.get(d.id))));
 
     counties.on("mouseover", function (d) {setHover(d)})
         .on("mouseout", function (d) {clearHover()});
 
+    counties.on("click", function(d){
+      if(!selectedCounties.includes(d.id)){
+        selectedCounties.push(d.id)
+      }
+      if(selectedCounties.length > 2){
+        selectedCounties = selectedCounties.slice(-2)
+      }
+      console.log(selectedCounties.map((i)=>countyStateNames.get(i)))
+    })
+
     map.select(".states")
         .datum(topojson.mesh(us, us.objects.states,(a, b)=> a !== b))
         .attr("d", path);
 }
+
+function updateSelection(){
+
+}
+
 
 function setup(error, data_index, us){
     window.data_index = data_index;
