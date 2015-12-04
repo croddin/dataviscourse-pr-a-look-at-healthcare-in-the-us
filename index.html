@@ -15,7 +15,7 @@
 
     <br />
 
-    <h2 id="scatterplotH2">Plot Showing Selected Parameter Against Self-reported Health Score</h2>
+    <h2 id="scatterplotH2">Plot Showing <span id="scatterDesc"></span> Against Self-reported Health Score</h2>
     <svg id="scatterplot" width="960" height="600">
         <g class="axis" id="xAxis"></g>
         <g id="xAxisLabel"></g>
@@ -23,7 +23,7 @@
         <g id="yAxisLabel"></g>
         <g id="circles"></g>
     </svg>
-    <div>Circles that appear as blue are counties that report better health, while those that appear as red represent counties that report a worse overall health status.</div>
+    <div>Circles that appear as blue represent counties that report better health, while those that appear as red represent counties that report a worse overall health status.</div>
 
     <div id="tooltip"></div>
 
@@ -38,7 +38,7 @@
     <div>The more saturated a county appears, the higher its percentage or total number. Counties that appear white have no recorded data for the requested metric.</div>
 
     <span class="barChart">
-    <h2 id="unhealthyBarChartH2">20 Unhealthiest Counties in America, According to Self-reported Health Score</h2>
+    <h2 id="unhealthyBarChartH2">20 Unhealthiest Counties in the US, According to Self-reported Health Score</h2>
     <svg id="ubarChart" width="500" height="600">
         <g class="axis" id="xuAxisBar"></g>
         <g class="axis" id="yuAxisBar"></g>
@@ -47,7 +47,7 @@
     </span>
 
     <span class="barChart">
-    <h2 id="healthyBarChartH2">20 Healthiest Counties in America, According to Self-reported Health Score</h2>
+    <h2 id="healthyBarChartH2">20 Healthiest Counties in the US, According to Self-reported Health Score</h2>
     <svg id="hbarChart" width="500" height="600">
         <g class="axis" id="xhAxisBar"></g>
         <g class="axis" id="yhAxisBar"></g>
