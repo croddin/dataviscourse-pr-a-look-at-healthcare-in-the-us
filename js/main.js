@@ -348,19 +348,17 @@ function updateScatterplot(fileName, yParameter) {
         .on("mouseout", function (d) {clearHover()})
         .on("click", selectCounty)
 
-    circles.attr("cy", function(d) {return yScale(d.yValue)})
-        .attr("cx", function(d) {return xScale(d.xValue)})
+    circles
         .attr("r", radius)
         .style("fill", function (d) {return colorScale(d.xValue)})
-        .attr("opacity", 0)
-        .transition().duration(2000)
-        .attr("opacity", 1);
+        .transition().duration(1000)
+        .attr("cy", function(d) {return yScale(d.yValue)})
+        .attr("cx", function(d) {return xScale(d.xValue)})
 
     circles.exit()
         .transition()
         .duration(1000)
         .attr("cy", function(d) {return yScale(0)})
-        .attr("cx", function(d) {return xScale(0)})
         .remove();
     updateSelection()
 
