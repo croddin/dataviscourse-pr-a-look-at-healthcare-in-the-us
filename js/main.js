@@ -446,6 +446,7 @@ function updateComparision(){
 function setup(error, data_index, us, summary){
     window.data_index = data_index;
     window.us = us;
+    d3.select("#clearSelection").on("click",clearSelection)
     files.set("SummaryMeasuresOfHealth",summary)
     downloadData("RiskFactorsAndAccessToCare", "Obesity",  updateMap);
     downloadData("RiskFactorsAndAccessToCare", "Obesity", updateScatterplot);
