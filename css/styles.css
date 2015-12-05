@@ -65,3 +65,7 @@ h2, div, label, select {
 #barChartExplanation {
   clear: both;
 }
+
+.clearSelection {
+  margin-left: 400px;
+}

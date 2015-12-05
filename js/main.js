@@ -367,9 +367,10 @@ function updateScatterplot(fileName, yParameter) {
 
 function updateMap(fileName, colName){
     var data = files.get(fileName);
-    var varById = d3.map();
+
     window.currentFile = fileName
     window.currentCol = colName
+    var varById = d3.map();
     data.forEach(d=>varById.set(getFipsCodeFromRow(d), getVarFromRow(d,colName)));
 
     //County names
@@ -428,6 +429,7 @@ function updateSelection(){
   window.circles
     .attr("r",(d)=> compareMode && selectedCounties.includes(parseInt(d.id))? 10 : 2)
     .attr("opacity",(d)=> !compareMode || selectedCounties.includes(parseInt(d.id)) ? 1 : .1)
+  updateComparision()
 }
 
 function clearSelection(){
@@ -436,17 +438,88 @@ function clearSelection(){
 }
 
 function updateComparision(){
-  var ca = selectedCounties[0]
-  var cb = selectedCounties[1]
+  var left = selectedCounties[0]
+  var right = selectedCounties[1]
+  var data = files.get("RiskFactorsAndAccessToCare");
+  var countyStateNames = getCountyStateNames(data)
+  var svgBounds = document.getElementById("comparison").getBoundingClientRect()
+  var leftName = left != undefined ? countyStateNames.get(left) : "Select a County"
+  var rightName = right != undefined ? countyStateNames.get(right) : "Select a County"
 
+  var lScale = d3.scale.linear()
+      .domain([0,100])
+      .range([svgBounds.width/5 * 2 , 10]);
+  var lWScale = d3.scale.linear()
+    .domain([0,100])
+    .range([0,lScale.range()[0]-lScale.range()[1]])
+  rScale = d3.scale.linear()
+      .domain([0,100])
+      .range([svgBounds.width/5 * 3, svgBounds.width-10]);
+  var rWScale = d3.scale.linear()
+    .domain([0,100])
+    .range([0,rScale.range()[1]-rScale.range()[0]])
+  var lAxis = d3.svg.axis().scale(lScale).orient("top");
+  var rAxis = d3.svg.axis().scale(rScale).orient("top");
 
+  var lBar = d3.select("#leftAxis")
+      .attr("transform", "translate(0 ,"+60+")")
+      .call(lAxis);
+  var rBar = d3.select("#rightAxis")
+      .attr("transform", "translate(0 ,"+60+")")
+      .call(rAxis);
+
+  d3.select("#leftCounty")
+    .text(leftName)
+    .attr("y",30)
+    .attr("x",svgBounds.width/5 * 1)
+  d3.select("#rightCounty")
+    .text(rightName)
+    .attr("y",30)
+    .attr("x",svgBounds.width/5 * 3.5)
+
+  var columns = ["No_Exercise","Few_Fruit_Veg","Obesity","Smoker","Diabetes"]
+  var shortDesc = ["No Exercise (%)","Few Fruit and Veggies (%)","Obesity (%)","Smokers (%)","Diabetes (%)"]
+  var colScale = d3.scale.ordinal()
+    .domain(columns)
+    .rangeBands([70,300])
+
+  var rowById = d3.map();
+  data.forEach(d=>rowById.set(getFipsCodeFromRow(d), d));
+  var lRow = rowById.get(left)
+  var rRow = rowById.get(right)
+
+  var leftBars = d3.select("#leftBars").selectAll("rect").data(left != undefined ? columns : [])
+  var rightBars = d3.select("#rightBars").selectAll("rect").data(right != undefined ? columns : [])
+
+  leftBars.enter().append("rect")
+  leftBars.exit().remove()
+  rightBars.enter().append("rect")
+  rightBars.exit().remove()
+  console.log(left)
+  leftBars.attr("height", 15)
+    .attr("y", function(d) {return colScale(d)})
+    .attr("x", (d)=>lScale(0)-lWScale(getVarFromRow(lRow,d)))
+    .attr("width", function(d) {return lWScale(getVarFromRow(lRow,d))})
+    .style("fill", function (d) {return cInterp(getVarFromRow(lRow,d)/100)})
+  rightBars.attr("height", 15)
+    .attr("y", function(d) {return colScale(d)})
+    .attr("x", rScale(0))
+    .attr("width", function(d) {return rWScale(getVarFromRow(rRow,d))})
+    .style("fill", function (d) {return cInterp(getVarFromRow(rRow,d)/100)})
+
+  d3.select("#chartLabels").selectAll("text").data(columns)
+    .enter().append("text")
+    .text((d,i)=>shortDesc[i])//descriptionFromColName()
+    .attr("y",(d)=>colScale(d)+15)
+    .attr("x",svgBounds.width/2)
+    .attr("text-anchor","middle")
 
 }
 
 function setup(error, data_index, us, summary){
     window.data_index = data_index;
     window.us = us;
-    d3.select("#clearSelection").on("click",clearSelection)
+    d3.selectAll(".clearSelection").on("click",clearSelection)
     files.set("SummaryMeasuresOfHealth",summary)
     downloadData("RiskFactorsAndAccessToCare", "Obesity",  updateMap);
     downloadData("RiskFactorsAndAccessToCare", "Obesity", updateScatterplot);
