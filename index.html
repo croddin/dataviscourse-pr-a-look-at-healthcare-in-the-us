@@ -13,13 +13,14 @@
     <div>This data shows some clear correlations between health status and some risk factors that you would expect like obesity and diabetes. But just as interestingly, in our opinion, is the fact that the data do not show some correlations where you might expect them to be, such as the percentage of women who get mammograms, the rate of physicians per 100,000 people, and--most tellingly for national healthcare policy--the number of uninsured.</div>
     <div>It is also interesting to look at the health status of the country as a whole. You can identify pockets of health and unhealthiness and ask what kinds of policies or environments are creating these conditions.</div>
     <div>While we cannot come to clear conclusions from these visualizations alone, of course, they may suggest areas for further study. We encourage you to explore the visualization and come to your own conclusions.</div>
-
+<iframe width="420" height="315"  style="margin: 0 auto;display:block;" src="https://www.youtube.com/embed/qRBAScAR0mg" frameborder="0" allowfullscreen></iframe>
     <hr />
 
     <label>Select parameter to update scatter plot and map:</label>
     <select id="data-selector"></select>
-
     <br />
+    <br />
+    <div>You may make selections by dragging a box around data in the scatterplot or map. Click clear selection to clear the selection. You may also select two counties to compare by clicking on them.</div>
 
     <h2 id="scatterplotH2">Plot Showing <span id="scatterDesc"></span> Against Self-reported Health Score</h2>
     <svg id="scatterplot" width="960" height="600">
@@ -28,7 +29,6 @@
         <g class="axis" id="yAxis"></g>
         <g id="yAxisLabel"></g>
         <g id="circles"></g>
-        <g class="selectBox"></g>
     </svg>
     <div>Circles that appear as blue represent counties that report better health, while those that appear as red represent counties that report a worse overall health status.</div>
     <br />
