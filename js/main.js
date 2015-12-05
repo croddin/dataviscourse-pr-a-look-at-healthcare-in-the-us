@@ -363,6 +363,47 @@ function updateScatterplot(fileName, yParameter) {
         .attr("cx", function(d) {return xScale(0)})
         .remove();
     updateSelection()
+
+    var selectBox = d3.select("#scatterplot .selectBox").selectAll("rect")
+
+    d3.select("#scatterplot").call(selectBehavior,circles)
+}
+
+function selectBehavior(a, elts){
+  a.on("mousedown",function(){
+    window.dragStart = d3.mouse(this)
+    a.select(".selectBox").selectAll("rect").data([1])
+      .enter().append("rect")
+      .classed("selection",true)
+      .attr("x",dragStart[0])
+      .attr("y",dragStart[1])
+  })
+  .on("mousemove",function(){
+    var m = d3.mouse(this)
+    a.select(".selectBox").selectAll("rect")
+      .attr("width",Math.max(m[0] - dragStart[0],0))
+      .attr("height",Math.max(m[1] - dragStart[1],0))
+  })
+  .on("mouseup",function(){
+    elts.each(function(d){
+      var rectEl = a.select(".selectBox rect").node()
+      if(rectEl == undefined) return
+      var svg = a.node()
+      var rect = svg.createSVGRect();
+      rect.x = rectEl.x.animVal.value;
+      rect.y = rectEl.y.animVal.value;
+      rect.height = rectEl.height.animVal.value;
+      rect.width = rectEl.width.animVal.value;
+
+      var intersect = a.node().checkIntersection(this,rect)
+      if(intersect){
+        addToSelection(parseInt(d.id))
+      }
+
+    })
+    updateSelection()
+    a.selectAll(".selectBox rect").remove()
+  })
 }
 
 function updateMap(fileName, colName){
@@ -409,6 +450,14 @@ function updateMap(fileName, colName){
     map.select(".states")
         .datum(topojson.mesh(us, us.objects.states,(a, b)=> a !== b))
         .attr("d", path);
+
+    map.call(selectBehavior,counties)
+}
+
+function addToSelection(id){
+  if(!selectedCounties.includes(id)){
+    selectedCounties.push(id)
+  }
 }
 
 function selectCounty(d){
@@ -427,7 +476,7 @@ function updateSelection(){
   window.counties
     .attr("opacity",(d)=> !compareMode || selectedCounties.includes(d.id) ? 1 : .1)
   window.circles
-    .attr("r",(d)=> compareMode && selectedCounties.includes(parseInt(d.id))? 10 : 2)
+    .attr("r",(d)=> compareMode && selectedCounties.includes(parseInt(d.id))? 5 : 2)
     .attr("opacity",(d)=> !compareMode || selectedCounties.includes(parseInt(d.id)) ? 1 : .1)
   updateComparision()
 }
@@ -495,7 +544,6 @@ function updateComparision(){
   leftBars.exit().remove()
   rightBars.enter().append("rect")
   rightBars.exit().remove()
-  console.log(left)
   leftBars.attr("height", 15)
     .attr("y", function(d) {return colScale(d)})
     .attr("x", (d)=>lScale(0)-lWScale(getVarFromRow(lRow,d)))
